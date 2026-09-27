@@ -1,0 +1,1103 @@
+{
+  "_README": {
+    "what_this_is": "Every word, phone number, image and link on the TPS Installations website comes from this one file. Nothing is hard-coded in the templates. Edit here (or at /admin) and the whole site updates on the next deploy.",
+    "json_has_no_comments": "JSON does not support // comments, so this _README block is the comment. Fields starting with an underscore are ignored by the site and hidden in the CMS.",
+    "copy_provenance": "The headline copy, service descriptions, process, FAQs and the 'what goes underneath' section were carried over from the previous version of this site. The phone number and Ferndown address are confirmed real. Everything still wrapped in [square brackets] or written as TPS_SOMETHING is NOT confirmed and must not go live.",
+    "MUST_FILL_BEFORE_LAUNCH": [
+      "areas[] and locationPages[] copy WRITTEN 27 Sep 2026 from public facts only (councils, conservation areas, permitted development, dropped kerbs, 5 m2 front garden rule, 25% re-roof rule, rivers at Wimborne). No claims about specific TPS jobs. Kevin should read it and add real local experience.",
+      "site.companyNumber 07311789 and registered office taken from Companies House (TPS INSTALLATIONS LTD, director Kevin Hardy Cole, incorporated 12 July 2010).",
+      "pages.privacy.body , DRAFTED 27 Sep 2026 from how the site actually works (Netlify form, reCAPTCHA, GA4 only after consent). Kevin must read and approve it, especially the retention periods (12 months for enquiries, 6 years for customers) and that form emails go to kevin@tpsinstallations.co.uk. Not legal advice.",
+      "analytics.ga4MeasurementId , create a GA4 property for tpsinstallations.co.uk and paste its G- ID. Until then no analytics and no cookie banner.",
+      "site.url and contact.email were set 27 Sep 2026 from Kevin's site sign (tpsinstallations.co.uk, kevin@tpsinstallations.co.uk). Confirm with Kevin that this mailbox is live.",
+      "trust.yearsTrading, STILL UNCONFIRMED. Checkatrade says member since 2004 (22 yrs) and 'more than 15 years experience'; the old site said 18. Ask Kevin, don't pick one.",
+      "trust.yearsTrading , replace TPS_YEARS (the old site said 18; unconfirmed)",
+      "trust.projectsCompleted , replace TPS_PROJECTS (the old site said 240+; unconfirmed)",
+      "trust.insuranceValue , replace TPS_INSURANCE_VALUE with the insurer and cover level",
+      "trust.guarantee , replace TPS_GUARANTEE with the real guarantee length",
+      "trust.wasteCarrierLicence , replace TPS_WASTE_LICENCE or delete the credential",
+      "services[].priceFrom , the old site's £38,000 / £95 per m2 / £6,500 were invented. Confirm or leave blank to hide.",
+      "testimonials[] , real reviews only. Inventing these is a civil offence in the UK under the DMCC Act 2024.",
+      "gallery[] , real before/after photos with descriptive alt text",
+      "contact.googleReviewsUrl / googleBusinessProfileUrl",
+      "social.* , real profile URLs, or \"\" to hide the icon",
+      "gallery[], the drag-to-compare sliders need BEFORE and AFTER shot from the SAME position. None of Kevin's 51 photos are matched pairs, so the compare gallery is not rendered anywhere yet. Either get matched pairs, or delete the component.",
+      "services[] for loft-conversions, garage-conversions, kitchens, bathrooms, body copy describes the trade honestly but contains no TPS-specific claims. Kevin should read it and add specifics.",
+      "HELD BACK AUTOMATICALLY: anything with TPS_ or [brackets] does not render (see the build log). The insurance, guarantee and waste carrier credentials show again once their 'flag' is cleared; the 'Insured' hero stat once trust.insuranceValue is real.",
+      "trust.wasteCarrierLicence: TPS Installations does NOT appear on the Environment Agency waste carrier register (checked 27 Sep 2026). Either Kevin registers, or delete that credential. Never show it as-is."
+    ],
+    "CONFIRMED_REAL": [
+      "contact.phoneDisplay / phoneLink, 07971 088302",
+      "contact.address, Ferndown, Dorset, BH22 9AB",
+      "site.legalName, TPS Installations Ltd",
+      "site.vatNumber, 228748181 (Checkatrade profile)",
+      "Owner, Kevin Cole; family-owned business",
+      "trust.checkatrade, 10/10 from 375 reviews (verified 2026-09-14; this number DRIFTS, re-check before launch), member since November 2004",
+      "trust.accreditations, City & Guilds and Checkatrade only",
+      "contact.freeEstimates, free estimates on domestic work"
+    ],
+    "PLACEHOLDER_TOKENS": {
+      "TPS_SITE_URL": "site.url, canonical tags, sitemap.xml, Open Graph, schema",
+      "TPS_EMAIL": "contact.email, footer, contact page, schema",
+      "TPS_YEARS / TPS_PROJECTS": "trust.*, hero stat row and the credentials section",
+      "TPS_INSURANCE_VALUE / TPS_GUARANTEE / TPS_WASTE_LICENCE": "trust.*, credentials section",
+      "TPS_COMPANY_NUMBER / TPS_VAT_NUMBER": "site.*, footer legal line",
+      "TPS_GOOGLE_REVIEWS_URL / TPS_GBP_URL": "contact.*, testimonials section and footer",
+      "TPS_WHATSAPP": "contact.whatsappNumber, sticky mobile bar and contact page"
+    },
+    "HOW_TO_ADD_A_SERVICE": "Add one object to services[]. Give it a unique slug. That creates /services/<slug>/ automatically. Then add one entry to locationPages[] for every town you want a landing page for.",
+    "HOW_TO_ADD_A_TOWN": "Add one object to areas[]. That creates /areas/<slug>/ automatically. Then add one locationPages[] entry per service to create the /<town>-<service>/ money pages.",
+    "WHY_LOCATION_PAGES_ARE_NOT_AUTO_GENERATED": "A town+service page is only built if it has its own entry in locationPages[] with real, unique copy. Auto-generating every combination from a template produces doorway pages, which Google penalises. The build prints a warning listing any combination you have not written yet.",
+    "COLOURS_AND_FONTS": "Not in this file. They are CSS custom properties at the top of src/assets/css/style.css so the whole site rebrands in one place.",
+    "DO_NOT_DO": [
+      "Do NOT put the Checkatrade 10/10 or 375 reviews into aggregateRating structured data. Third-party platform ratings cannot be marked up as the business's own, it's a Google manual action. Display them as attributed, linked text only.",
+      "The '£1,000 guarantee' on the Checkatrade profile is Checkatrade's own scheme, NOT a TPS workmanship guarantee. trust.guarantee is still unconfirmed.",
+      "Do NOT copy individual Checkatrade review text onto the site. Link to the profile instead."
+    ]
+  },
+  "site": {
+    "name": "TPS Installations",
+    "legalName": "TPS Installations Ltd",
+    "tagline": "Extensions, driveways and roofing across Dorset. Planned, priced and built hands-on by the owner. Based in Ferndown.",
+    "url": "https://tpsinstallations.co.uk",
+    "locale": "en_GB",
+    "language": "en-GB",
+    "companyNumber": "07311789",
+    "vatNumber": "228748181",
+    "logo": "/assets/img/logo.svg",
+    "logoAlt": "TPS Installations",
+    "logoSubtitle": "Ferndown · Dorset",
+    "defaultOgImage": "/assets/img/og-default.jpg",
+    "defaultOgImageAlt": "TPS Installations: extensions, driveways and roofing across Dorset",
+    "themeColor": "#F7F4F0",
+    "copyrightStartYear": 2026,
+    "registeredOffice": "55 Crown Street, Brentwood, Essex, CM14 4BD",
+    "registeredIn": "England and Wales"
+  },
+  "seo": {
+    "titleSuffix": " | TPS Installations",
+    "defaultDescription": "Extensions, driveways and roofing across Dorset, planned and built hands-on by the owner. Free site visit and a fixed written price.",
+    "twitterHandle": "",
+    "googleSiteVerification": "",
+    "bingSiteVerification": ""
+  },
+  "analytics": {
+    "_note": "No tracking loads until provider AND its ID are set. Options: \"\" (off), \"ga4\", \"plausible\". GA4 only loads after the visitor presses Accept on the cookie banner.",
+    "provider": "ga4",
+    "ga4MeasurementId": "",
+    "plausibleDomain": "",
+    "consent": {
+      "text": "We'd like to use Google Analytics cookies to see which pages people find useful. They're only set if you say yes.",
+      "accept": "Accept",
+      "reject": "Reject",
+      "settingsLabel": "Cookie settings"
+    }
+  },
+  "contact": {
+    "phoneDisplay": "07971 088302",
+    "phoneLink": "+447971088302",
+    "whatsappNumber": "TPS_WHATSAPP",
+    "whatsappMessage": "Hi TPS Installations, I'd like a quote for",
+    "email": "kevin@tpsinstallations.co.uk",
+    "address": {
+      "street": "",
+      "locality": "Ferndown",
+      "region": "Dorset",
+      "postcode": "BH22 9AB",
+      "country": "GB"
+    },
+    "geo": {
+      "latitude": 50.8078,
+      "longitude": -1.8992
+    },
+    "serviceRadiusMiles": 30,
+    "openingHours": [
+      {
+        "days": "Monday to Friday",
+        "hours": "7:30am to 6:00pm",
+        "schema": "Mo-Fr 07:30-18:00"
+      },
+      {
+        "days": "Saturday",
+        "hours": "8:00am to 1:00pm",
+        "schema": "Sa 08:00-13:00"
+      },
+      {
+        "days": "Sunday",
+        "hours": "Closed",
+        "schema": ""
+      }
+    ],
+    "responseTimePromise": "We come back within one working day to arrange a free site visit.",
+    "googleReviewsUrl": "TPS_GOOGLE_REVIEWS_URL",
+    "googleBusinessProfileUrl": "TPS_GBP_URL",
+    "googleRating": "",
+    "googleReviewCount": "",
+    "checkatradeUrl": "https://www.checkatrade.com/trades/tpsinstallationsltd",
+    "freeEstimates": "Free estimates on domestic work."
+  },
+  "social": {
+    "facebook": "",
+    "instagram": "",
+    "linkedin": "",
+    "youtube": "",
+    "tiktok": "",
+    "x": ""
+  },
+  "trust": {
+    "yearsTrading": "TPS_YEARS",
+    "yearsTradingLabel": "Years on the tools",
+    "projectsCompleted": "TPS_PROJECTS",
+    "projectsCompletedLabel": "Projects completed",
+    "fixedQuotesLabel": "Written quotes",
+    "fixedQuotesValue": "Fixed",
+    "insuredValue": "Insured",
+    "insuredLabel": "Certificates on request",
+    "insuranceValue": "TPS_INSURANCE_VALUE",
+    "guarantee": "TPS_GUARANTEE",
+    "wasteCarrierLicence": "TPS_WASTE_LICENCE",
+    "strapline": "Free site visit, fixed written price, and an honest answer about whether it's a job we're right for.",
+    "checkatrade": {
+      "_note": "REAL, verified on the Checkatrade profile. DISPLAY ONLY, always attributed and linked. These figures must NEVER go into aggregateRating structured data, reviews collected on a third-party platform cannot be marked up as the business's own, and doing so earns a Google manual action.",
+      "rating": "10/10",
+      "reviewCount": "375",
+      "memberSince": "November 2004",
+      "label": "on Checkatrade",
+      "url": "https://www.checkatrade.com/trades/tpsinstallationsltd"
+    },
+    "credentialsEyebrow": "Peace of mind",
+    "credentialsHeading": "The boring bits that matter.",
+    "credentials": [
+      {
+        "title": "Fully insured",
+        "body": "Public liability cover in place. Certificates provided before work starts, not after you ask twice.",
+        "flag": "Add insurer and cover level"
+      },
+      {
+        "title": "Workmanship guarantee",
+        "body": "Written guarantee on every completed project, backed by a business that isn't going anywhere.",
+        "flag": "Confirm length"
+      },
+      {
+        "title": "Trade accreditations",
+        "body": "City & Guilds qualified, and a Checkatrade member since November 2004. That meant passing up to 12 vetting checks.",
+        "flag": ""
+      },
+      {
+        "title": "Licensed waste carrier",
+        "body": "Every skip and grab load tracked and tipped legally, with transfer notes available on request.",
+        "flag": "Add licence number"
+      }
+    ],
+    "accreditations": [
+      {
+        "name": "City & Guilds",
+        "logo": "/assets/img/badge-city-guilds.svg",
+        "alt": "City & Guilds qualified",
+        "url": "",
+        "membershipNumber": ""
+      },
+      {
+        "name": "Checkatrade",
+        "logo": "/assets/img/badge-checkatrade.svg",
+        "alt": "Checkatrade member since November 2004",
+        "url": "https://www.checkatrade.com/trades/tpsinstallationsltd",
+        "membershipNumber": ""
+      }
+    ]
+  },
+  "nav": {
+    "primary": [
+      {
+        "label": "Services",
+        "url": "/services/"
+      },
+      {
+        "label": "Areas We Cover",
+        "url": "/areas/"
+      },
+      {
+        "label": "Work",
+        "url": "/gallery/"
+      },
+      {
+        "label": "About",
+        "url": "/about/"
+      },
+      {
+        "label": "Contact",
+        "url": "/contact/"
+      }
+    ],
+    "footerLegal": [
+      {
+        "label": "Privacy",
+        "url": "/privacy/"
+      },
+      {
+        "label": "Sitemap",
+        "url": "/sitemap.xml"
+      }
+    ]
+  },
+  "cta": {
+    "primaryLabel": "Get my free quote",
+    "primaryUrl": "/contact/",
+    "secondaryLabel": "Call the owner",
+    "whatsappLabel": "WhatsApp",
+    "bandHeading": "Get it built properly, the first time.",
+    "bandBody": "Free site visit, fixed written price, and an honest answer about whether it's a job we're right for."
+  },
+  "form": {
+    "heading": "Let's price it up properly.",
+    "intro": "Tell us roughly what you're after and we'll come back within one working day to arrange a free site visit. No obligation at the end of it.",
+    "submitLabel": "Send my enquiry",
+    "nextLabel": "Next",
+    "backLabel": "Back",
+    "stepCounter": "Step {n} of {total}",
+    "steps": {
+      "job": "The job",
+      "property": "The property",
+      "details": "Your details"
+    },
+    "pickJobMessage": "Pick the closest one, or choose Not sure yet.",
+    "privacyNote": "Your details are used to quote your job and nothing else. No lists, no spam.",
+    "jobTypes": [
+      "Not sure yet"
+    ],
+    "callTimes": [
+      "Morning",
+      "Afternoon",
+      "Evening"
+    ],
+    "labels": {
+      "name": "Your name",
+      "phone": "Phone",
+      "postcode": "Property postcode",
+      "jobType": "What are you looking to have done?",
+      "message": "Anything else we should know?",
+      "callTime": "Best time to call",
+      "optional": "Optional"
+    }
+  },
+  "strip": {
+    "items": [
+      "Extensions",
+      "Loft conversions",
+      "Garage conversions",
+      "Kitchens",
+      "Bathrooms",
+      "Driveways",
+      "Roofing",
+      "Groundwork",
+      "Brickwork",
+      "Patios",
+      "Rendering",
+      "Renovations"
+    ]
+  },
+  "process": {
+    "eyebrow": "How it runs",
+    "heading": "From first call to final sweep.",
+    "intro": "Five stages, no surprises in between. You'll know who's coming, what's happening and what it costs at every point.",
+    "steps": [
+      {
+        "title": "The call",
+        "body": "Tell us what you're thinking. If it's not a job we're right for, we'll say so on the phone rather than waste a visit. Where we can, we'll point you at someone who is.",
+        "timing": "Same day, usually"
+      },
+      {
+        "title": "Site visit",
+        "body": "We come out and look at it properly: ground conditions, access, drainage, what's already there. This is where the real cost of a job reveals itself, and it's why we won't quote blind over email.",
+        "timing": "Within one working day of your enquiry"
+      },
+      {
+        "title": "Planned and priced",
+        "body": "Drawings and pricing are worked up in-house by the person who'll build it. You get a fixed written quotation with the build-up specified: depths, materials, stages. Not a single number on a compliments slip.",
+        "timing": "Typically 3 to 5 days"
+      },
+      {
+        "title": "On site",
+        "body": "Work starts on the agreed date with the owner on the tools. Specialist trades are booked in around the programme. Site is swept and made safe every evening, and you get told what's happening tomorrow.",
+        "timing": "Staged payments as work completes"
+      },
+      {
+        "title": "Snagged and signed off",
+        "body": "We walk it with you, write down anything you're not happy with, and fix it before the final invoice. Building control sign-off and any certificates are handed over with the keys.",
+        "timing": "Final payment only when you're happy"
+      }
+    ]
+  },
+  "differentiator": {
+    "eyebrow": "Why we're different",
+    "heading": "Every quote looks the same on handover day.",
+    "intro": "Two driveways can look identical the afternoon they're finished and be three thousand pounds apart. The difference is buried where you'll never see it. It shows up in year three, not week one. Here's exactly what we put underneath.",
+    "buildUps": [
+      {
+        "title": "Under a driveway",
+        "layers": [
+          {
+            "label": "Blocks or porcelain",
+            "spec": "50mm"
+          },
+          {
+            "label": "Sharp sand laying course",
+            "spec": "30mm"
+          },
+          {
+            "label": "Compacted MOT Type 1",
+            "spec": "150mm+"
+          },
+          {
+            "label": "Geotextile membrane",
+            "spec": "full area"
+          }
+        ],
+        "note": "The corner that gets cut is the sub-base: 75mm instead of 150mm, uncompacted, no membrane. It looks perfect for two summers, then ruts under the car and the joints open up."
+      },
+      {
+        "title": "Under an extension",
+        "layers": [
+          {
+            "label": "Screed and finish",
+            "spec": "75mm"
+          },
+          {
+            "label": "Insulation",
+            "spec": "to current regs"
+          },
+          {
+            "label": "DPM, lapped to DPC",
+            "spec": "sealed"
+          },
+          {
+            "label": "Concrete slab and footings",
+            "spec": "to depth"
+          }
+        ],
+        "note": "Footings get dug to the depth the ground actually needs, not the depth that keeps the muck-away bill down. The membrane gets lapped and taped into the wall DPC properly, because damp is unfixable later."
+      },
+      {
+        "title": "Under a roof",
+        "layers": [
+          {
+            "label": "Tiles or slate",
+            "spec": "new or reclaimed"
+          },
+          {
+            "label": "Treated battens",
+            "spec": "graded"
+          },
+          {
+            "label": "Breathable membrane",
+            "spec": "full strip"
+          },
+          {
+            "label": "Rotten deck left in place",
+            "spec": "the shortcut"
+          }
+        ],
+        "note": "A cheap re-roof means tiles over the existing felt and battens. We strip to the rafters, replace anything soft, and you get a roof that's genuinely new rather than resurfaced."
+      }
+    ],
+    "closing": "Ask every builder you're quoting to write the build-up into the quote. Depth of sub-base, thickness of concrete, whether the roof is being stripped to the rafters. Any decent builder will put it in writing without hesitating. Then the quotes that suddenly look cheap start to make sense."
+  },
+  "services": [
+    {
+      "slug": "extensions",
+      "name": "Building & extensions",
+      "shortName": "Extensions",
+      "eyebrow": "Core service",
+      "cardSummary": "Single and two-storey extensions, structural openings and full renovations, footings to shell.",
+      "image": "/assets/img/service-extensions.jpg",
+      "imageAlt": "A rear extension nearing completion, bifold doors fitted and blockwork ready for render",
+      "h1": "Building & extensions",
+      "intro": "Single and two-storey extensions, structural openings and full renovations, taken from footings through to a shell that's ready to decorate.",
+      "body": "The person who walks your property is the person who prices it, plans it, and turns up in the morning to build it. Planning is handled in-house rather than farmed out, so the drawings, the quotation and the work on site all come from the same head.\n\nFootings get dug to the depth the ground actually needs, not the depth that keeps the muck-away bill down. The damp-proof membrane gets lapped and taped into the wall DPC properly, because damp is unfixable once the floor is down. Where a specialist is needed (a plasterer for a whole-house skim, an electrician for first fix), we bring in people we've worked alongside for years and rate personally.\n\nA single-storey rear extension is usually eight to twelve weeks from breaking ground to handover. You'll get a realistic programme with your quote rather than an optimistic one designed to win the job.",
+      "bullets": [
+        "Rear and side extensions",
+        "Footings and groundwork",
+        "Brickwork and blockwork",
+        "Structural openings",
+        "Rendering and plastering"
+      ],
+      "priceFrom": "",
+      "priceLabel": "Typical rear extension from",
+      "seo": {
+        "title": "Extensions in Ferndown & Dorset",
+        "description": "Single and two-storey extensions across Dorset, planned in-house and built by the owner. Fixed written price and a realistic programme."
+      }
+    },
+    {
+      "slug": "driveways-paving",
+      "name": "Driveways & paving",
+      "shortName": "Driveways",
+      "eyebrow": "Driveways & landscaping",
+      "cardSummary": "Block paving, porcelain, stone, resin and tarmac on a dug-out, compacted base with proper falls.",
+      "image": "/assets/img/service-driveways.jpg",
+      "imageAlt": "A finished gravel driveway and rendered retaining wall in front of a bungalow",
+      "h1": "Driveways & paving",
+      "intro": "Block paving, porcelain, natural stone, resin and tarmac. All laid on a dug-out, compacted base with proper falls, so it drains away from the house and stays flat.",
+      "body": "The bit that decides whether a driveway is still flat in year five is the bit you never see. Ours go down on a geotextile membrane with 150mm or more of MOT Type 1, compacted in layers rather than in one pass, then a 30mm sharp sand laying course.\n\nFalls are set so water runs away from the house and into a soakaway or a linear drain, not towards the door. Edge restraints are haunched properly, because a driveway that spreads at the edges has failed no matter how good the blocks were.\n\nThe corner that gets cut on a cheap quote is almost always the sub-base: 75mm instead of 150mm, uncompacted, no membrane. It looks perfect for two summers, then ruts under the car and the joints open up.",
+      "bullets": [
+        "Block paved driveways",
+        "Porcelain and stone patios",
+        "Resin-bound surfacing",
+        "Drainage and soakaways",
+        "Retaining walls and steps",
+        "Kerbs and edgings"
+      ],
+      "priceFrom": "",
+      "priceLabel": "Driveways from",
+      "seo": {
+        "title": "Driveways & Paving in Dorset",
+        "description": "Block paving, porcelain, stone and resin driveways across Dorset, laid on a properly compacted sub-base with drainage that works."
+      }
+    },
+    {
+      "slug": "roofing",
+      "name": "Roofing & roofline",
+      "shortName": "Roofing",
+      "eyebrow": "Pitched & flat",
+      "cardSummary": "Full re-roofs, repairs, flat roofs and roofline. Stripped back and rebuilt, not resurfaced.",
+      "image": "/assets/img/service-roofing.jpg",
+      "imageAlt": "Slate tiles being laid over breathable membrane on a battened roof",
+      "h1": "Roofing & roofline",
+      "intro": "Full re-roofs, repairs, flat roofs and roofline. Stripped back, checked for rot, re-felted and battened properly. Not tiles laid back over a failing deck.",
+      "body": "A cheap re-roof means tiles laid back over the existing felt and battens. It buys a few years and hides whatever is rotting underneath. We strip to the rafters, replace anything soft, and lay a breathable membrane across the full area before new graded battens go on.\n\nTiles can be new or reclaimed depending on what the property needs and what the conservation position is. Leadwork and flashings are formed properly rather than sealed with mastic and hoped for.\n\nFlat roofs are EPDM or GRP, laid on a deck that's been checked rather than assumed. Fascias, soffits and guttering can be done at the same time while the scaffold is already up, which is usually the cheapest time to do them.",
+      "bullets": [
+        "Full re-roofs",
+        "Tile and slate repairs",
+        "EPDM and GRP flat roofs",
+        "Fascias, soffits and guttering",
+        "Leadwork and flashing",
+        "Chimney and ridge work"
+      ],
+      "priceFrom": "",
+      "priceLabel": "Typical semi re-roof from",
+      "seo": {
+        "title": "Roofing in Ferndown & Dorset",
+        "description": "Full re-roofs, repairs, flat roofs and roofline across Dorset. Stripped to the rafters and rebuilt properly, with a fixed written price."
+      }
+    },
+    {
+      "slug": "loft-conversions",
+      "name": "Loft conversions",
+      "shortName": "Loft conversions",
+      "eyebrow": "Core service",
+      "cardSummary": "Unused roof space turned into a proper room: new floor structure, staircase, insulation and dormers where the headroom needs them.",
+      "image": "/assets/img/service-loft-conversions.jpg",
+      "imageAlt": "A finished dormer loft conversion clad in grey, above a brick house",
+      "h1": "Loft conversions",
+      "intro": "Unused roof space turned into a room you'd actually want to be in. New floor structure, a proper staircase, insulation, and a dormer where the headroom calls for one.",
+      "body": "A loft conversion is a structural job before it's a decorating one. The ceiling joists up there were sized to hold plasterboard, not people, so a new floor structure goes in independently of them. Everything else follows from that and from the headroom: where the stairs can land, whether the space needs a dormer, how the roof windows sit in the pitch.\n\nSo the first visit is spent in the loft with a tape measure rather than showing you a brochure. If the space works, you'll be told what it can become. If it doesn't, you'll be told that as well, before anyone has spent money finding out.\n\nThe person who prices it is the person who builds it, and the quote is a written fixed price with a programme you can plan around.",
+      "bullets": [
+        "New floor structure",
+        "Dormers",
+        "Roof windows",
+        "Staircases",
+        "Insulation and plasterboard",
+        "Eaves storage"
+      ],
+      "priceFrom": "",
+      "priceLabel": "Typical loft conversion from",
+      "seo": {
+        "title": "Loft Conversions in Ferndown, Dorset",
+        "description": "Loft conversions across Dorset. Floor structure, stairs, dormers and roof windows, priced and built by the owner."
+      }
+    },
+    {
+      "slug": "garage-conversions",
+      "name": "Garage & outbuilding conversions",
+      "shortName": "Garage conversions",
+      "eyebrow": "Core service",
+      "cardSummary": "Garages, carports and outbuildings made properly habitable: insulated, floored, lined and finished.",
+      "image": "/assets/img/service-garage-conversions.jpg",
+      "imageAlt": "A brick outbuilding converted into a room, with new French doors onto the garden",
+      "h1": "Garage & outbuilding conversions",
+      "intro": "Space you already own, made properly habitable. An office, a spare room, a gym, finished to the same standard as the rest of the house.",
+      "body": "The shell is usually the easy part. What decides whether a converted garage feels like a room or like a garage with carpet in it is what happens to the floor, the walls and the old door opening.\n\nA garage floor is normally laid to fall towards the door so water runs out of it. That has to be levelled and insulated before anything else goes down. The walls are often single skin, so they get lined and insulated rather than simply skimmed. And the up-and-over opening is either built up in matching brick or replaced with doors or a window, depending on what the room is going to be used for.\n\nDone properly it stops reading as a converted garage from the outside as well as the inside.",
+      "bullets": [
+        "Garage conversions",
+        "Carport and outbuilding conversions",
+        "Insulated floors",
+        "Wall lining and insulation",
+        "Door openings built up or reglazed",
+        "Plastering and finishing"
+      ],
+      "priceFrom": "",
+      "priceLabel": "Typical garage conversion from",
+      "seo": {
+        "title": "Garage Conversions in Dorset",
+        "description": "Garage, carport and outbuilding conversions across Dorset. Insulated, lined and finished by the builder who priced them."
+      }
+    },
+    {
+      "slug": "kitchens",
+      "name": "Kitchen refurbishments",
+      "shortName": "Kitchens",
+      "eyebrow": "Core service",
+      "cardSummary": "Full kitchen refits: strip out, services, floors and units, through to a room that's ready to use.",
+      "image": "/assets/img/service-kitchens.jpg",
+      "imageAlt": "A finished cream gloss kitchen with wood-effect worktops and a built-in double oven",
+      "h1": "Kitchen refurbishments",
+      "intro": "Full kitchen refits, from stripping the old one out to a room that's ready to use, including the walls, floors and services hidden behind the units.",
+      "body": "Most of a kitchen refit is invisible by the time it's finished. The old units come out, and what's behind them is usually where the real work is: walls that were never straight, pipework routed around a layout nobody uses any more, and sockets nowhere near the appliances you've actually bought.\n\nThat gets sorted before a single new unit goes back. Floors levelled, services moved to suit the new layout, walls made good. That way the units sit true, the doors line up, and the worktop meets the wall without a bead of filler doing the work.\n\nWhether the kitchen itself comes from a supplier or from you, the room comes back finished rather than handed over to somebody else to tidy up.",
+      "bullets": [
+        "Strip out and disposal",
+        "Layout changes and structural openings",
+        "Plumbing and electrics moved to suit",
+        "Floor levelling and tiling",
+        "Unit and worktop fitting",
+        "Making good and decorating"
+      ],
+      "priceFrom": "",
+      "priceLabel": "Typical kitchen refit from",
+      "seo": {
+        "title": "Kitchen Refurbishments in Ferndown & Dorset",
+        "description": "Full kitchen refits across Dorset. Strip out, services, floors and fitting, handled by one team from start to finish."
+      }
+    },
+    {
+      "slug": "bathrooms",
+      "name": "Bathroom refurbishments",
+      "shortName": "Bathrooms",
+      "eyebrow": "Core service",
+      "cardSummary": "Bathrooms taken back to the walls and rebuilt. Services and waterproofing first, then tiling and fitting.",
+      "image": "/assets/img/service-bathrooms.jpg",
+      "imageAlt": "A finished bathroom with marble-effect tiling, a wall-hung vanity unit with a counter-top basin and a round mirror between two windows",
+      "h1": "Bathroom refurbishments",
+      "intro": "Bathrooms stripped back to the walls and rebuilt properly. The services and the waterproofing first, then the tiling and the fittings.",
+      "body": "A bathroom is a small room where everything is either wet or hidden, which is why it's the room most often paid for twice.\n\nTaken back to the walls, the order is what matters: services and falls first, then boarding and waterproofing behind the tiles, then tiling, then fittings. Tile backer board and a proper tanking system in the wet areas cost very little at that stage, and they are the difference between a bathroom that lasts and one that quietly rots behind the grout.\n\nThe room comes back finished, including the parts people forget to price, like making good the ceiling and getting the extraction right.",
+      "bullets": [
+        "Strip out and disposal",
+        "Re-routed plumbing and electrics",
+        "Tanking and tile backer board",
+        "Wall and floor tiling",
+        "Suite and screen fitting",
+        "Extraction and making good"
+      ],
+      "priceFrom": "",
+      "priceLabel": "Typical bathroom refit from",
+      "seo": {
+        "title": "Bathroom Refurbishments in Ferndown & Dorset",
+        "description": "Bathroom refits across Dorset. Tanked, tiled and fitted in the right order by the builder who priced the job."
+      }
+    }
+  ],
+  "areas": [
+    {
+      "slug": "ferndown",
+      "name": "Ferndown",
+      "county": "Dorset",
+      "postcodes": "BH22",
+      "intro": "Ferndown is home. We're based here in BH22, so a site visit is a short drive, not a special trip, and popping back for a second look is easy. The town is mostly family homes and bungalows, and a lot of owners want more room without having to move.",
+      "localReference": "Ferndown sits inside Dorset Council's area, so planning and building control questions go to Dorset Council, not BCP.",
+      "seo": {
+        "title": "Builders in Ferndown",
+        "description": "Ferndown-based builder covering extensions, driveways and roofing. Free site visit, fixed written price, owner on site."
+      }
+    },
+    {
+      "slug": "bournemouth",
+      "name": "Bournemouth",
+      "county": "Dorset",
+      "postcodes": "BH1 to BH11",
+      "intro": "Bournemouth has everything from Victorian villas to 1930s semis and modern flats. Many streets sit in conservation areas, and parking and access can be tight, so we plan deliveries, skips and scaffold before the first day, not on it. Ferndown is only a few miles up the road.",
+      "localReference": "Bournemouth has more than a dozen conservation areas, including Meyrick Park and Talbot Woods, East Cliff and Southbourne Grove. Inside one, some work that is normally permitted development needs planning permission, so we check first.",
+      "seo": {
+        "title": "Builders in Bournemouth",
+        "description": "Extensions, driveways and roofing across Bournemouth from a Ferndown-based builder. Free site visit and a fixed written quotation."
+      }
+    },
+    {
+      "slug": "poole",
+      "name": "Poole",
+      "county": "Dorset",
+      "postcodes": "BH12 to BH17",
+      "intro": "Poole runs from the harbour and Sandbanks up to Broadstone and Canford Heath, so no two jobs look alike. Coastal homes take more weather, and some roads are narrow. We price for both at the site visit, so the quote is the price.",
+      "localReference": "Poole has its own conservation areas, including Sandbanks, Branksome Park, Canford Cliffs and Ashley Cross. Planning here goes to BCP Council, which has covered Bournemouth, Christchurch and Poole since 2019.",
+      "seo": {
+        "title": "Builders in Poole",
+        "description": "Extensions, driveways and roofing in Poole, planned and built by the owner. Free site visit, fixed price, no main-contractor mark-up."
+      }
+    },
+    {
+      "slug": "wimborne",
+      "name": "Wimborne",
+      "county": "Dorset",
+      "postcodes": "BH21",
+      "intro": "Wimborne is ten minutes from our base in Ferndown. It is an old market town with a historic centre, tight streets and plenty of older properties, so we look closely at access, parking and what the building is actually made of before we price anything.",
+      "localReference": "Wimborne town centre is a conservation area, and the Rivers Stour and Allen meet here. Homes near either river can sit in a flood zone, which changes what a planning application needs.",
+      "seo": {
+        "title": "Builders in Wimborne",
+        "description": "Wimborne extensions, driveways and roofing from a builder ten minutes up the road in Ferndown. Free site visit and a fixed written price."
+      }
+    }
+  ],
+  "testimonials": [
+    {
+      "quote": "[Roy C's Checkatrade review, 17 March: garage and workshop roof replacement. PERMISSION NEEDED before this goes live: ask him if you may quote it here.]",
+      "name": "Roy C",
+      "location": "Wimborne",
+      "service": "roofing",
+      "rating": 5,
+      "date": ""
+    },
+    {
+      "quote": "[Nicola V's Checkatrade review, 13 June: new en suite. She attached photos to it; ask for those too. PERMISSION NEEDED before this goes live.]",
+      "name": "Nicola V",
+      "location": "Totton",
+      "service": "bathrooms",
+      "rating": 5,
+      "date": ""
+    },
+    {
+      "quote": "[Daren B's Checkatrade review: complete home and garden refurbishment. The most recent one. PERMISSION NEEDED before this goes live.]",
+      "name": "Daren B",
+      "location": "Christchurch",
+      "service": "extensions",
+      "rating": 5,
+      "date": ""
+    }
+  ],
+  "gallery": [
+    {
+      "id": "job-1",
+      "title": "[Job 1 title: what was there before, what was built]",
+      "service": "extensions",
+      "area": "",
+      "caption": "[One line on the job: what was there before, what was built, how long it took.]",
+      "beforeImage": "",
+      "beforeAlt": "[Describe the property before the extension was built]",
+      "afterImage": "",
+      "afterAlt": "[Describe the finished two-storey side extension]"
+    },
+    {
+      "id": "job-2",
+      "title": "[Job 2 title: what was there before, what was built]",
+      "service": "driveways-paving",
+      "area": "",
+      "caption": "[One line on the job.]",
+      "beforeImage": "",
+      "beforeAlt": "[Describe the old driveway]",
+      "afterImage": "",
+      "afterAlt": "[Describe the finished block paved driveway]"
+    },
+    {
+      "id": "job-3",
+      "title": "[Job 3 title: what was there before, what was built]",
+      "service": "extensions",
+      "area": "",
+      "caption": "[One line on the job.]",
+      "beforeImage": "",
+      "beforeAlt": "[Describe the boundary before]",
+      "afterImage": "",
+      "afterAlt": "[Describe the finished garden wall and piers]"
+    },
+    {
+      "id": "job-4",
+      "title": "[Job 4 title: what was there before, what was built]",
+      "service": "roofing",
+      "area": "",
+      "caption": "[One line on the job.]",
+      "beforeImage": "",
+      "beforeAlt": "[Describe the failing roof before]",
+      "afterImage": "",
+      "afterAlt": "[Describe the finished re-roof]"
+    },
+    {
+      "id": "job-5",
+      "title": "[Job 5 title: what was there before, what was built]",
+      "service": "driveways-paving",
+      "area": "",
+      "caption": "[One line on the job.]",
+      "beforeImage": "",
+      "beforeAlt": "[Describe the garden before]",
+      "afterImage": "",
+      "afterAlt": "[Describe the finished porcelain patio and steps]"
+    },
+    {
+      "id": "job-6",
+      "title": "[Job 6 title: what was there before, what was built]",
+      "service": "extensions",
+      "area": "",
+      "caption": "[One line on the job.]",
+      "beforeImage": "",
+      "beforeAlt": "[Describe the garage before conversion]",
+      "afterImage": "",
+      "afterAlt": "[Describe the finished converted room]"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Do you carry out the work yourselves?",
+      "answer": "Yes. Every job is planned and priced by the owner, and he's on site working it. Where a specialist trade is needed (a roofer for a full strip, a plasterer for a whole-house skim, an electrician for first fix), we bring in people we've worked alongside for years. You deal with the same person throughout, and he's accountable for all of it.",
+      "scope": "global"
+    },
+    {
+      "question": "What areas do you cover?",
+      "answer": "Based in Ferndown and covering most of Dorset: Bournemouth, Poole, Wimborne, Christchurch, Verwood, Ringwood, Wareham and the villages in between. Slightly further out, ask anyway; it depends on the size of the job.",
+      "scope": "global"
+    },
+    {
+      "question": "Is the quote fixed, or does it move?",
+      "answer": "Fixed and in writing. The price only changes if you ask for something extra, or if something genuinely unforeseeable turns up once the ground's open: unrecorded drainage, inadequate existing foundations, rot under a roof deck. If that happens we stop, show you, and agree the cost before continuing. You'll never find out about extra work on the final invoice.",
+      "scope": "global"
+    },
+    {
+      "question": "Why is a cheaper quote sometimes a false economy?",
+      "answer": "Because the savings almost always come from what gets buried. A 75mm sub-base instead of 150mm. Thinner concrete. No membrane. Tiles laid back over failing battens. On handover day the two jobs look identical. The difference shows up in year three, when the driveway ruts or the ceiling stains. Ask every builder quoting you to write the build-up into the quote.",
+      "scope": "global"
+    },
+    {
+      "question": "How long does a typical extension take?",
+      "answer": "A single-storey rear extension is usually eight to twelve weeks from breaking ground to handover. Two-storey work runs longer. The variables are ground conditions, how fast building control can inspect, and lead times on anything bespoke like steels or glazing. You'll get a realistic programme with your quote rather than an optimistic one designed to win the job.",
+      "scope": "global"
+    },
+    {
+      "question": "Do you handle planning and building regulations?",
+      "answer": "The planning side is handled in-house rather than farmed out to a third party. We'll tell you upfront whether your project needs full permission or falls under permitted development, and we'll work to your building control inspector's schedule and be on site for the inspections.",
+      "scope": "global"
+    },
+    {
+      "question": "What sub-base do you lay under a driveway?",
+      "answer": "For a domestic driveway, typically 150mm or more of MOT Type 1 over a geotextile membrane, compacted in layers rather than in a single pass, then a 30mm sharp sand laying course under the blocks or slabs. Falls are set so water runs away from the house.",
+      "scope": "global"
+    }
+  ],
+  "pages": {
+    "home": {
+      "seo": {
+        "title": "Builders in Ferndown & Dorset",
+        "description": "Extensions, driveways and roofing across Dorset, planned and built hands-on by the owner. Free site visit and a fixed written price."
+      },
+      "heroEyebrow": "Ferndown · Dorset",
+      "heroHeadline": "The difference is under the surface.",
+      "heroHeadlineAccent": "surface",
+      "heroSubheadline": "Extensions, conversions, kitchens, bathrooms, driveways and roofing across Dorset. What makes them last isn't the finish you see on handover day. It's the depth of the base, the detail at the edges, and the fact that the owner is on site laying it himself.",
+      "heroImage": "/assets/img/hero.jpg",
+      "heroImageAlt": "A chalet bungalow rear part-built on a clear day. Cream cladding and a glass balcony rail above blockwork and brick, bifold doors open onto the lawn with a builder at work inside",
+      "servicesEyebrow": "What we do",
+      "servicesHeading": "Seven trades. One person accountable.",
+      "servicesIntro": "Planned, priced and worked by the same person from the first call to the final sweep.",
+      "aboutEyebrow": "Who you're dealing with",
+      "aboutHeading": "A builder who never left the site.",
+      "aboutBody": "Most building firms of any size put a salesman in front of you, an estimator behind him, and a site manager you meet once. TPS Installations is deliberately built the other way round.\n\nThe person who walks your property is the person who prices it, plans it, and turns up in the morning to build it. That means fewer jobs on the books at any one time, and a straight answer when you ask how it's going.",
+      "aboutImage": "/assets/img/about.jpg",
+      "aboutImageAlt": "Fencing being set out and erected on site, laser level on a tripod",
+      "galleryEyebrow": "Recent work",
+      "galleryHeading": "Judge it on the finish.",
+      "galleryIntro": "Real jobs, photographed on site. No stock photography and no computer renders.",
+      "testimonialsEyebrow": "What clients say",
+      "testimonialsHeading": "Word of mouth, written down.",
+      "testimonialsIntro": "",
+      "areasEyebrow": "Where we work",
+      "areasHeading": "Ferndown and most of Dorset.",
+      "areasIntro": "Based in Ferndown, covering a 30 mile radius. Slightly further out, ask anyway. It depends on the size of the job.",
+      "faqEyebrow": "Questions",
+      "faqHeading": "Everything homeowners ask.",
+      "faqIntro": ""
+    },
+    "services": {
+      "seo": {
+        "title": "Our Services",
+        "description": "Extensions, driveways and roofing across Dorset. Three trades, one person accountable from the first call to the final sweep."
+      },
+      "h1": "Three trades. One person accountable.",
+      "intro": "Extensions, driveways and roofing. Planned in-house, priced in writing, and worked by the owner rather than subcontracted out and marked up.",
+      "gridHeading": "What we do"
+    },
+    "areas": {
+      "seo": {
+        "title": "Areas We Cover",
+        "description": "Based in Ferndown, covering most of Dorset within a 30 mile radius: Bournemouth, Poole, Wimborne and the villages in between."
+      },
+      "h1": "Ferndown, and most of Dorset.",
+      "intro": "Based in Ferndown and working across a 30 mile radius. Slightly further out, ask anyway. It depends on the size of the job."
+    },
+    "gallery": {
+      "seo": {
+        "title": "Our Work",
+        "description": "Extensions, driveways, patios and re-roofs across Dorset. Every project planned, priced and worked by the owner."
+      },
+      "h1": "Judge it on the finish.",
+      "intro": "Real jobs, photographed on site across Dorset. No stock photography and no computer renders.",
+      "gridHeading": "Recent jobs"
+    },
+    "about": {
+      "seo": {
+        "title": "About TPS Installations",
+        "description": "A Ferndown builder who prices the job, plans it, and turns up in the morning to build it. No salesman, no main-contractor mark-up."
+      },
+      "h1": "A builder who never left the site.",
+      "intro": "Most building firms put a salesman in front of you, an estimator behind him, and a site manager you meet once. TPS Installations is a family business, run by Kevin Cole, built the other way round.",
+      "body": "TPS Installations is a family-owned business run by Kevin Cole. The person who walks your property is the person who prices it, plans it, and turns up in the morning to build it. That means fewer jobs on the books at any one time, and a straight answer when you ask how it's going.\n\nWhere a specialist is needed, we bring in bricklayers, roofers, plasterers and electricians we've worked alongside for years and rate personally. Not whoever came in cheapest that week.\n\n[Kevin, a paragraph on how the business started and what you want people to know. This is the most persuasive thing on the page and it's the one bit that can't be written for you.]",
+      "image": "/assets/img/about.jpg",
+      "imageAlt": "Fencing being set out and erected on site, laser level on a tripod",
+      "valuesHeading": "How we work",
+      "values": [
+        {
+          "title": "No main-contractor mark-up",
+          "body": "Because the planning is in-house and the owner works the job, there's no management layer stacked on every trade's price."
+        },
+        {
+          "title": "One number, one person",
+          "body": "You're not passed between a call centre, an account manager and a foreman. You have the mobile of the man doing the work."
+        },
+        {
+          "title": "Priced once, in writing",
+          "body": "The figure on the quotation is the figure on the invoice. Variations are agreed with you before anyone lifts a tool."
+        }
+      ]
+    },
+    "contact": {
+      "seo": {
+        "title": "Get a Free Quote",
+        "description": "Free site visit and a fixed written quotation, usually arranged within one working day. Call 07971 088302 or send an enquiry."
+      },
+      "h1": "Let's price it up properly.",
+      "intro": "Tell us roughly what you're after and we'll come back within one working day to arrange a free site visit. Takes about sixty seconds, and there's no obligation at the end of it."
+    },
+    "thanks": {
+      "seo": {
+        "title": "Thank You",
+        "description": "Your enquiry has been received."
+      },
+      "h1": "Thanks, that's with us.",
+      "body": "We'll be in touch within one working day to arrange your free site visit. If it's urgent, ring 07971 088302."
+    },
+    "notFound": {
+      "seo": {
+        "title": "Page Not Found",
+        "description": "The page you were looking for could not be found."
+      },
+      "h1": "That page has moved on.",
+      "body": "It happens. Here's everything else. Or ring the owner directly and skip the website altogether."
+    },
+    "privacy": {
+      "seo": {
+        "title": "Privacy Policy",
+        "description": "How TPS Installations collects, uses and stores your personal data."
+      },
+      "h1": "Privacy Policy",
+      "lastUpdated": "27 September 2026",
+      "body": "TPS Installations Ltd (\"we\", \"us\") runs this website. This page explains what personal information we collect through it, why, and what you can ask us to do with it. We are the data controller for that information.\n\n## What we collect\n\nWhen you send the quote form we receive your name, phone number, the property postcode, the type of job, the best time to call (if you pick one) and anything you write in the message box. We also note which page of the site you sent it from.\n\nIf you phone, text or email us, we keep the details you give us so we can deal with your enquiry.\n\nWe do not ask for, and do not want, bank details or anything sensitive through this website.\n\n## Why we use it\n\nWe use your details to reply to your enquiry, arrange a site visit, prepare a quote and, if you go ahead, carry out and invoice the work.\n\nThe legal basis is that you have asked us to take these steps before entering a contract, and our legitimate interest in answering enquiries about our work. We never sell your details, never add you to a mailing list and never pass them to anyone to market to you.\n\n## Who else handles it\n\nOur website is hosted by Netlify, Inc., which also stores quote form messages and forwards them to our business email. Netlify is based in the United States and transfers data under recognised UK safeguards.\n\nThe quote form uses Google reCAPTCHA to stop spam. Google may collect information about your device and how you use the form for that purpose.\n\nIf you choose to contact us by WhatsApp, that conversation is also handled by WhatsApp (Meta) under their own privacy terms.\n\n## Cookies and analytics\n\nThe site sets no advertising cookies. We use Google Analytics to see which pages are useful, but only if you press Accept on the cookie banner. If you press Reject, or ignore it, Google Analytics is not loaded at all. You can change your mind at any time with the Cookie settings link at the bottom of every page.\n\nYour cookie choice itself is remembered in your browser so we don't ask on every page.\n\n## How long we keep it\n\nIf an enquiry does not turn into a job, we delete it within 12 months. If we do work for you, we keep your details and job records for 6 years after the job is finished, because the law requires us to keep business and tax records for that long.\n\n## Your rights\n\nYou can ask us for a copy of the information we hold about you, ask us to correct it, ask us to delete it, or object to us using it. Just contact us using the details below. We will reply within one month and there is no charge.\n\nIf you are not happy with how we have handled your information, you can complain to the Information Commissioner's Office at ico.org.uk or on 0303 123 1113.\n\n## Changes\n\nIf we change how we use personal information, we will update this page and the date at the top."
+    }
+  },
+  "locationPages": [
+    {
+      "areaSlug": "ferndown",
+      "serviceSlug": "extensions",
+      "h1": "Extensions in Ferndown",
+      "intro": "Ferndown has a lot of bungalows and family homes built in the second half of the last century. They often have good sized gardens, which makes a single-storey rear extension one of the most common requests.\n\nPlenty of these can be done under permitted development, with no full planning application. For a detached house that means up to 4 metres out the back, or up to 8 metres through the prior approval process. For semis and terraces the figures are 3 and 6 metres. We check which applies before you pay for drawings.\n\nBungalows open another option: building up into the roof. That can add a bedroom and bathroom without losing any garden at all.\n\nBecause we are based in Ferndown, we can be on site quickly for the visit, and quickly again if anything needs sorting during the build.",
+      "localReference": "Ferndown is covered by Dorset Council for planning and building control. It is also ringed by protected heathland, such as Ferndown Common.",
+      "seo": {
+        "title": "Extensions in Ferndown",
+        "description": "Single and two-storey extensions in Ferndown, planned in-house and built by the owner. Free site visit and a fixed written price."
+      }
+    },
+    {
+      "areaSlug": "ferndown",
+      "serviceSlug": "driveways-paving",
+      "h1": "Driveways & paving in Ferndown",
+      "intro": "A lot of Ferndown homes were built with a single garage and a short drive. Two cars later, the front garden starts to look like the obvious place for more parking.\n\nBefore anything goes down, two things need checking. First, paving more than 5 square metres of a front garden with a surface that water can't drain through needs planning permission. Permeable block paving, or a design that runs water onto a planted area, avoids that. Second, if you need a new or wider dropped kerb, that is a separate application to the council.\n\nThe part you never see matters most. We dig out to a proper depth, lay a compacted sub-base and edge restraints, then lay the blocks or slabs. Skimping on the base is what makes a new drive sink or spread within a couple of years.\n\nYou get a fixed written price after a free site visit.",
+      "localReference": "In Ferndown a new dropped kerb is approved by Dorset Council's highways team, and it has to be in place before you drive over the pavement.",
+      "seo": {
+        "title": "Driveways & Paving in Ferndown",
+        "description": "Block paving, porcelain and resin driveways in Ferndown, laid on a properly compacted sub-base with drainage that works."
+      }
+    },
+    {
+      "areaSlug": "ferndown",
+      "serviceSlug": "roofing",
+      "h1": "Roofing in Ferndown",
+      "intro": "Many Ferndown homes are now 40 to 60 years old, which is about the age their original roofs start asking for attention. Slipped or cracked tiles, tired felt, crumbling mortar on ridges and verges, and flat roofs on garages and extensions that have simply worn out.\n\nNot every problem needs a new roof. We look at the whole thing first and tell you straight if a repair will do.\n\nIf a full re-roof is the right answer, it is worth knowing the rules. Replacing more than a quarter of a roof is notifiable to building control, and the new roof then has to meet current insulation standards. We build that into the quote rather than finding it out halfway through.\n\nBeing local means a leak in Ferndown gets looked at quickly, not added to the end of a long list.",
+      "localReference": "Re-roofing more than a quarter of a roof slope needs building control sign off, which in Ferndown means Dorset Council or an approved inspector.",
+      "seo": {
+        "title": "Roofing in Ferndown",
+        "description": "Re-roofs, repairs, flat roofs and roofline in Ferndown. Stripped to the rafters and rebuilt properly, with a fixed written price."
+      }
+    },
+    {
+      "areaSlug": "bournemouth",
+      "serviceSlug": "extensions",
+      "h1": "Extensions in Bournemouth",
+      "intro": "Bournemouth houses range from big Victorian and Edwardian villas to interwar semis and post-war bungalows. The right extension for each is very different, so we start by looking at how the house is built and how you actually use it.\n\nRear extensions that open a kitchen onto the garden are the most common request. Side returns can work well on older semis and terraces where there is a narrow strip of unused space.\n\nPlenty of streets here sit in conservation areas. Inside one, some work that would normally be permitted development needs planning permission, and materials usually have to match the house. We check that before any drawings are paid for.\n\nAccess is the other thing. On busy roads and tight plots we plan skips, deliveries and scaffold before the first day, so the job doesn't stall.",
+      "localReference": "Planning in Bournemouth goes to BCP Council. Conservation areas include Meyrick Park and Talbot Woods, East Cliff, Boscombe Spa and Southbourne Grove.",
+      "seo": {
+        "title": "Extensions in Bournemouth",
+        "description": "Rear, side and two-storey extensions in Bournemouth, priced and built by the owner. Fixed written quotation, realistic programme."
+      }
+    },
+    {
+      "areaSlug": "bournemouth",
+      "serviceSlug": "driveways-paving",
+      "h1": "Driveways & paving in Bournemouth",
+      "intro": "Parking is tight in a lot of Bournemouth, so turning a front garden into a driveway is one of the most useful jobs we do here.\n\nTwo rules apply before a single block is laid. Paving more than 5 square metres of a front garden with a surface water can't drain through needs planning permission, so we usually recommend permeable block paving or a design that drains onto a planted strip. And a new or wider dropped kerb needs separate approval from the council.\n\nIn conservation areas the look matters as well. Front boundary walls and the style of paving can be part of what the council wants to keep.\n\nUnderneath, it is the same as anywhere. Proper dig out, compacted sub-base, edge restraints, then the surface. That is what stops a drive sinking or spreading, and it is the part a cheap quote cuts.",
+      "localReference": "A dropped kerb in Bournemouth is approved by BCP Council's highways team. You need that approval before you drive across the pavement.",
+      "seo": {
+        "title": "Driveways & Paving in Bournemouth",
+        "description": "Driveways and patios across Bournemouth in block paving, porcelain, stone and resin, on a dug-out and compacted base."
+      }
+    },
+    {
+      "areaSlug": "bournemouth",
+      "serviceSlug": "roofing",
+      "h1": "Roofing in Bournemouth",
+      "intro": "Bournemouth has a lot of older roofs: Victorian and Edwardian slate and clay tile, 1930s concrete tile, and plenty of flat roofs on bays, dormers and rear extensions.\n\nBeing close to the sea, roofs here take more wind and weather than they would inland, so fixings, flashings and ridge work need doing properly. That is usually where leaks start.\n\nWe look at the whole roof, not just the patch you can see from the garden, and tell you honestly whether it needs a repair or a replacement.\n\nOn a full re-roof, replacing more than a quarter of the roof is notifiable to building control and brings current insulation rules into play. In a conservation area, changing the roofing material can also need permission. We check both before we price.",
+      "localReference": "In Bournemouth's conservation areas, swapping a roof covering for a different material can need planning permission from BCP Council, so like for like is often the simpler route.",
+      "seo": {
+        "title": "Roofing in Bournemouth",
+        "description": "Full re-roofs, tile and slate repairs, flat roofs and roofline across Bournemouth. Stripped back and rebuilt, not resurfaced."
+      }
+    },
+    {
+      "areaSlug": "poole",
+      "serviceSlug": "extensions",
+      "h1": "Extensions in Poole",
+      "intro": "Poole covers a lot of ground, from the harbour and Sandbanks through Parkstone and Broadstone to Canford Heath. The homes vary just as much, so no two extensions here are quite the same.\n\nRear kitchen extensions and garden rooms are common requests. On larger plots, two-storey side and rear extensions come up too.\n\nSome of Poole sits in conservation areas, where more of the work needs planning permission and the design has to suit the street. Near the harbour and coast, some homes also sit in flood zones, which adds a flood risk assessment to a planning application. We check both at the site visit so there are no surprises later.\n\nYou get a fixed written price and the owner on site, from the footings through to the finish.",
+      "localReference": "Poole's conservation areas include Sandbanks, Branksome Park and Chine Gardens, Canford Cliffs and Ashley Cross. Planning here is handled by BCP Council.",
+      "seo": {
+        "title": "Extensions in Poole",
+        "description": "Extensions and garage conversions in Poole, planned in-house and worked by the owner. No main-contractor mark-up."
+      }
+    },
+    {
+      "areaSlug": "poole",
+      "serviceSlug": "driveways-paving",
+      "h1": "Driveways & paving in Poole",
+      "intro": "Front driveways are in constant demand across Poole, from Parkstone to Broadstone to Canford Heath, where on-street parking gets harder every year.\n\nBefore we dig, we check the rules. Paving more than 5 square metres of a front garden in a surface water can't drain through needs planning permission. Permeable block paving, or directing water onto a planted area, keeps it within permitted development. A new or wider dropped kerb needs its own approval from the council.\n\nDrainage matters more near the coast and harbour, where heavy rain has less room to go. We design the fall and the drainage so water goes where it should, not towards your house or your neighbour's.\n\nThen it is the proper build up: dig out, compacted sub-base, edge restraints and the surface you've chosen.",
+      "localReference": "In Poole, dropped kerb applications go to BCP Council's highways team, and the kerb has to be lowered before a new driveway can be used.",
+      "seo": {
+        "title": "Driveways & Paving in Poole",
+        "description": "Block paved and porcelain driveways and patios in Poole, with soakaways and falls set so water runs away from the house."
+      }
+    },
+    {
+      "areaSlug": "poole",
+      "serviceSlug": "roofing",
+      "h1": "Roofing in Poole",
+      "intro": "Poole's coastal position is hard on roofs. Salt air and strong winds off the harbour and the bay wear fixings, lead and mortar faster than they would further inland.\n\nThe most common problems are slipped tiles, failing ridge and verge mortar, worn flashings around chimneys, and flat roofs on extensions and garages that have reached the end of their life.\n\nWe start by looking at the whole roof and telling you plainly whether it needs a repair or a replacement.\n\nIf it is a full re-roof, replacing more than a quarter of the roof is notifiable to building control, and the new roof must meet current insulation standards. In conservation areas, changing the roof material can also need permission. All of that is checked and priced before we start.",
+      "localReference": "Parts of Poole, such as Sandbanks and Canford Cliffs, are conservation areas where a change of roof material can need planning permission from BCP Council.",
+      "seo": {
+        "title": "Roofing in Poole",
+        "description": "Re-roofs, flat roofs, leadwork and roofline in Poole. Stripped to the rafters, rotten timber replaced, membrane across the full area."
+      }
+    },
+    {
+      "areaSlug": "wimborne",
+      "serviceSlug": "extensions",
+      "h1": "Extensions in Wimborne",
+      "intro": "Wimborne mixes a historic town centre with Victorian terraces, interwar houses and newer estates towards Colehill and Merley. Each needs a different approach to an extension.\n\nIn the centre, the conservation area means more of the work needs planning permission, and materials need to suit the building. On newer homes, a single-storey rear extension can often go ahead under permitted development.\n\nThe rivers matter here too. The Stour and the Allen meet at Wimborne, and homes close to either can sit in a flood zone. That adds a flood risk assessment to a planning application and can affect floor levels. We check it at the first visit.\n\nWimborne is ten minutes from our base in Ferndown, so we are close by for the whole build.",
+      "localReference": "Wimborne sits in Dorset Council's area. Its town centre is a conservation area, and land near the Stour and the Allen can fall in a flood zone.",
+      "seo": {
+        "title": "Extensions in Wimborne",
+        "description": "Extensions and renovations in Wimborne from a builder ten minutes away in Ferndown. Fixed written price, owner on the tools."
+      }
+    },
+    {
+      "areaSlug": "wimborne",
+      "serviceSlug": "driveways-paving",
+      "h1": "Driveways & paving in Wimborne",
+      "intro": "Around Wimborne, a lot of homes on older streets were never built with off-road parking in mind, so turning a front garden into a driveway is a common request.\n\nThe rules are the same across England. Paving more than 5 square metres of a front garden in a surface water can't drain through needs planning permission, so permeable paving or a planted soakaway strip is usually the way to go. A new or wider dropped kerb needs separate approval from the council.\n\nDrainage deserves extra thought here, with the Stour and the Allen close by. We design falls and drainage so rainwater soaks away properly rather than running onto the road or towards the house.\n\nUnderneath, it is dig out, compacted sub-base, edge restraints, then the finish. That is what keeps a drive level for years.",
+      "localReference": "In Wimborne, dropped kerbs are approved by Dorset Council's highways team. Inside the town centre conservation area, front boundary changes can also need consent.",
+      "seo": {
+        "title": "Driveways & Paving in Wimborne",
+        "description": "Driveways, patios and retaining walls in Wimborne, laid on 150mm or more of compacted MOT Type 1 over a geotextile membrane."
+      }
+    },
+    {
+      "areaSlug": "wimborne",
+      "serviceSlug": "roofing",
+      "h1": "Roofing in Wimborne",
+      "intro": "Wimborne has some of the oldest buildings in the area, from the historic centre to Victorian terraces and cottages, alongside newer homes on the edge of town.\n\nOlder roofs need a careful eye. Original slate and clay tiles can often be reused, and matching materials matters, especially in the conservation area where a change of roof covering can need planning permission.\n\nOn newer homes the usual issues are slipped tiles, tired ridge mortar and flat roofs on extensions and garages that have worn out.\n\nWe look at the whole roof first and tell you honestly whether it needs a repair or a replacement. If more than a quarter of the roof is being replaced, that is notifiable to building control and brings current insulation rules in. We price all of that up front.",
+      "localReference": "Wimborne's town centre is a conservation area under Dorset Council, so like for like materials are usually the simplest route when a roof is replaced there.",
+      "seo": {
+        "title": "Roofing in Wimborne",
+        "description": "Full re-roofs, repairs and roofline in Wimborne. New battens, breathable membrane and any soft timber replaced before tiles go back."
+      }
+    }
+  ],
+  "work": [
+    {
+      "id": "work-kitchen",
+      "image": "/assets/img/work-kitchen.jpg",
+      "alt": "A finished kitchen with a travertine floor, glazed oak doors and a built-in double oven"
+    },
+    {
+      "id": "work-driveway",
+      "image": "/assets/img/work-driveway.jpg",
+      "alt": "A finished gravel driveway behind a white rendered retaining wall, with fresh tarmac at the kerb"
+    },
+    {
+      "id": "work-dormer",
+      "image": "/assets/img/work-dormer.jpg",
+      "alt": "A dormer being framed on a tiled roof, with the scaffold up around it"
+    },
+    {
+      "id": "work-bathroom",
+      "image": "/assets/img/work-bathroom.jpg",
+      "alt": "A walk-in shower with a frameless glass screen and black fittings against marble-effect tiling"
+    },
+    {
+      "id": "work-conversion",
+      "image": "/assets/img/work-conversion.jpg",
+      "alt": "A converted outbuilding finished as a room, with downlights and French doors onto the garden"
+    },
+    {
+      "id": "work-patio-2",
+      "image": "/assets/img/work-patio-2.jpg",
+      "alt": "Riven sandstone paving laid up to the French doors of a red brick house"
+    },
+    {
+      "id": "work-stairs",
+      "image": "/assets/img/work-stairs.jpg",
+      "alt": "A new painted staircase with a glass balustrade, treads not yet covered"
+    },
+    {
+      "id": "work-garden-room",
+      "image": "/assets/img/work-garden-room.jpg",
+      "alt": "A glazed garden room on a rendered dwarf wall, added to the side of a bungalow"
+    },
+    {
+      "id": "work-patio",
+      "image": "/assets/img/work-patio.jpg",
+      "alt": "A grey sandstone patio with a linear drainage channel, against painted blockwork"
+    },
+    {
+      "id": "work-living",
+      "image": "/assets/img/work-living.jpg",
+      "alt": "An open-plan living and dining space with a freestanding log burner and pendant lighting"
+    },
+    {
+      "id": "work-kitchen-2",
+      "image": "/assets/img/work-kitchen-2.jpg",
+      "alt": "A finished kitchen in white, with a grey tiled floor and a chimney extractor"
+    },
+    {
+      "id": "work-garden-room-build",
+      "image": "/assets/img/work-garden-room-build.jpg",
+      "alt": "A glazed garden room part-built, glass units still stacked against the rendered dwarf wall"
+    },
+    {
+      "id": "work-driveway-2",
+      "image": "/assets/img/work-driveway-2.jpg",
+      "alt": "A block paved driveway in a brindle mix, laid up to a garage door"
+    },
+    {
+      "id": "work-loft",
+      "image": "/assets/img/work-loft.jpg",
+      "alt": "A finished room in the eaves, plastered and decorated with an eaves access hatch"
+    },
+    {
+      "id": "work-parquet",
+      "image": "/assets/img/work-parquet.jpg",
+      "alt": "A decorated room with a herringbone parquet floor and a bay window"
+    },
+    {
+      "id": "work-bathroom-2",
+      "image": "/assets/img/work-bathroom-2.jpg",
+      "alt": "A finished bathroom with a wall-hung vanity, concealed cistern and marble-effect tiled floor"
+    }
+  ]
+}
