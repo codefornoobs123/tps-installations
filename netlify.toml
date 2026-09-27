@@ -1,0 +1,68 @@
+# ============================================================================
+# TPS Installations: Netlify config
+# ----------------------------------------------------------------------------
+# Restored 2026-09-27. The previous copy went missing from the project folder
+# during the September tidy-up, which meant a fresh Netlify site would have
+# had no build command and none of the security headers below.
+#
+# The Content-Security-Policy itself lives in a <meta> tag in base.njk, NOT
+# here, on purpose: a header would also apply to /admin, and the Decap CMS
+# needs a far looser policy than the public site. The one CSP directive a
+# meta tag can't carry (frame-ancestors) is set here instead.
+# ============================================================================
+
+[build]
+  # Not `npm run build`: that starts by deleting _site/, which would throw
+  # away the image cache restored below. A Netlify checkout never has a
+  # stale _site/ to clean anyway.
+  command = "node tools/preflight.js && npx @11ty/eleventy"
+  publish = "_site"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Every deploy is otherwise a COLD build: eleventy-img re-renders every photo
+# into AVIF + WebP + JPEG at four widths, about 5 minutes. Caching the output
+# folder and eleventy-img's cache between deploys brings that down to seconds.
+[[plugins]]
+  package = "netlify-plugin-cache"
+  [plugins.inputs]
+    paths = ["_site/assets/img/opt", ".cache"]
+
+# ---- Security headers, every page ----------------------------------------
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+    Cross-Origin-Opener-Policy = "same-origin"
+    X-Permitted-Cross-Domain-Policies = "none"
+    Content-Security-Policy = "frame-ancestors 'none'"
+
+# ---- Caching ---------------------------------------------------------------
+# Optimised images have content-hashed file names, so they can be cached
+# for a year: a changed photo gets a new name.
+[[headers]]
+  for = "/assets/img/opt/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Fonts and JS keep fixed names, so a month, not forever.
+[[headers]]
+  for = "/assets/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+[[headers]]
+  for = "/assets/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+# ---- The CMS ---------------------------------------------------------------
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-cache"
