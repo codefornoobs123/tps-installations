@@ -1,0 +1,82 @@
+<!doctype html>
+<html class="no-js" data-theme="light" lang="{{ tps.site.language or 'en-GB' }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{%- set suffix = tps.seo.titleSuffix or "" -%}
+{%- set fullTitle = (title + suffix) if ((title | length) + (suffix | length)) <= 60 else title -%}
+<title>{{ fullTitle }}</title>
+<meta name="description" content="{{ description or tps.seo.defaultDescription }}">
+<link rel="canonical" href="{{ page.url | absUrl(tps.derived.siteUrl) }}">
+{% if noindex %}<meta name="robots" content="noindex, follow">{% else %}<meta name="robots" content="index, follow, max-image-preview:large">{% endif %}
+{% if tps.seo.googleSiteVerification %}<meta name="google-site-verification" content="{{ tps.seo.googleSiteVerification }}">{% endif %}
+{% if tps.seo.bingSiteVerification %}<meta name="msvalidate.01" content="{{ tps.seo.bingSiteVerification }}">{% endif %}
+
+{#- Content Security Policy. Set here rather than in netlify.toml so it applies
+    to the public site only and can never lock Decap out of /admin.
+    frame-ancestors can't be set from a meta tag — netlify.toml carries that. -#}
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  base-uri 'self';
+  object-src 'none';
+  form-action 'self';
+  img-src 'self' data:{% if tps.analytics.provider == 'ga4' %} https://*.google-analytics.com https://*.googletagmanager.com{% endif %};
+  style-src 'self' 'unsafe-inline';
+  font-src 'self';
+  script-src 'self' https://identity.netlify.com{% if tps.analytics.provider == 'plausible' %} https://plausible.io{% endif %}{% if tps.analytics.provider == 'ga4' %} https://*.googletagmanager.com{% endif %} https://www.google.com https://www.gstatic.com https://www.recaptcha.net;
+  connect-src 'self' https://identity.netlify.com{% if tps.analytics.provider == 'plausible' %} https://plausible.io{% endif %}{% if tps.analytics.provider == 'ga4' %} https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com{% endif %};
+  frame-src https://www.google.com https://www.recaptcha.net https://recaptcha.net;
+  upgrade-insecure-requests">
+
+{%- set ogImg = ogImage or tps.site.defaultOgImage -%}
+<meta property="og:type" content="{{ ogType or 'website' }}">
+<meta property="og:site_name" content="{{ tps.site.name }}">
+<meta property="og:locale" content="{{ tps.site.locale or 'en_GB' }}">
+<meta property="og:title" content="{{ fullTitle }}">
+<meta property="og:description" content="{{ description or tps.seo.defaultDescription }}">
+<meta property="og:url" content="{{ page.url | absUrl(tps.derived.siteUrl) }}">
+<meta property="og:image" content="{{ ogImg | absUrl(tps.derived.siteUrl) }}">
+<meta property="og:image:alt" content="{{ ogImageAlt or tps.site.defaultOgImageAlt }}">
+<meta name="twitter:card" content="summary_large_image">
+{% if tps.seo.twitterHandle %}<meta name="twitter:site" content="{{ tps.seo.twitterHandle }}">{% endif %}
+<meta name="twitter:title" content="{{ fullTitle }}">
+<meta name="twitter:description" content="{{ description or tps.seo.defaultDescription }}">
+<meta name="twitter:image" content="{{ ogImg | absUrl(tps.derived.siteUrl) }}">
+<meta name="twitter:image:alt" content="{{ ogImageAlt or tps.site.defaultOgImageAlt }}">
+
+<meta name="theme-color" content="{{ tps.site.themeColor }}">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+
+{#- Type. Three faces, self-hosted from npm (@fontsource), latin subset,
+    font-display: swap. Only the three used above the fold are preloaded —
+    the heavier Lora weights are fetched when the browser meets them. -#}
+<link rel="preload" href="/assets/fonts/lora-500.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+<link rel="preload" href="/assets/fonts/plus-jakarta-sans-400.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+<link rel="preload" href="/assets/fonts/space-mono-400.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+
+{#- The whole stylesheet, minified and inlined: zero render-blocking requests. -#}
+<script src="/assets/js/boot.js"></script>
+{% inlineCss %}
+
+{% include "schema.njk" %}
+{% include "analytics.njk" %}
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+{% include "header.njk" %}
+
+<main id="main">
+{{ content | safe }}
+</main>
+
+{% include "footer.njk" %}
+{% include "sticky-cta.njk" %}
+{% include "cookie-banner.njk" %}
+
+<script src="/assets/js/main.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{% from "icons.njk" import star %}
+{%- set source = testimonialItems if testimonialItems else tps.testimonials -%}
+{#- A testimonial is only shown once it holds real words. Invented reviews
+    breach the DMCC Act 2024, so a placeholder renders nothing at all. -#}
+{%- set items = [] -%}
+{%- for t in source -%}
+  {%- if t.quote and "[" not in t.quote -%}{%- set items = (items.push(t), items) -%}{%- endif -%}
+{%- endfor -%}
+{%- if items.length %}
+<div class="grid grid--3">
+  {%- for t in items %}
+  <figure class="quote">
+    {%- if t.rating %}
+    <div class="stars" role="img" aria-label="{{ t.rating }} out of 5 stars">
+      {%- for i in range(0, t.rating) %}{{ star() }}{% endfor %}
+    </div>
+    {%- endif %}
+    <blockquote>{{ t.quote }}</blockquote>
+    <figcaption>
+      <cite>{{ t.name }}</cite>
+      {{ t.location }}{% if tps.serviceBySlug[t.service] %} &middot; {{ tps.serviceBySlug[t.service].name }}{% endif %}
+    </figcaption>
+  </figure>
+  {%- endfor %}
+</div>
+{%- endif %}
+{#- The Checkatrade score is real and verifiable. It is deliberately NOT in the
+    structured data: a rating collected on a third-party platform can't be
+    marked up as the business's own. Attributed text and a link only. -#}
+{%- if tps.trust.checkatrade.rating %}
+<figure class="rating-card">
+  <div class="rating-card__score">
+    <b>{{ tps.trust.checkatrade.rating }}</b>
+    {#- Labelled explicitly. The score is out of TEN, and an unlabelled
+        figure next to a five-star component reads as the wrong scale. -#}
+    <span>Checkatrade score</span>
+  </div>
+  <figcaption>
+    <strong>{{ tps.trust.checkatrade.reviewCount }} verified reviews</strong>
+    <span>Member since {{ tps.trust.checkatrade.memberSince }}</span>
+  </figcaption>
+  <a class="rating-card__link" href="{{ tps.trust.checkatrade.url }}" target="_blank" rel="noopener">
+    Read them on Checkatrade <span aria-hidden="true">&#8599;</span>
+  </a>
+</figure>
+{%- endif %}
+{%- if tps.contact.googleReviewsUrl and "TPS_" not in tps.contact.googleReviewsUrl %}
+<a class="reviews-link" href="{{ tps.contact.googleReviewsUrl }}" target="_blank" rel="noopener">
+  Read our Google reviews <span aria-hidden="true">&#8599;</span>
+</a>
+{%- endif %}

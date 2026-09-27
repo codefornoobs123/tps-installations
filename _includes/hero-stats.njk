@@ -1,0 +1,38 @@
+{#- Hero stat row. A stat is only rendered if its value is real — anything
+    still holding a TPS_ token is dropped rather than shown as a placeholder
+    or filled with a plausible number. -#}
+{%- set stats = [] -%}
+{%- if "TPS_" not in tps.trust.yearsTrading -%}
+  {%- set stats = (stats.push({ "v": tps.trust.yearsTrading, "l": tps.trust.yearsTradingLabel, "count": true }), stats) -%}
+{%- endif -%}
+{%- if "TPS_" not in tps.trust.projectsCompleted -%}
+  {%- set stats = (stats.push({ "v": tps.trust.projectsCompleted, "l": tps.trust.projectsCompletedLabel, "count": true }), stats) -%}
+{%- endif -%}
+{%- if tps.trust.checkatrade.rating -%}
+  {%- set stats = (stats.push({
+    "v": tps.trust.checkatrade.rating,
+    "l": tps.trust.checkatrade.reviewCount + " Checkatrade reviews",
+    "url": tps.trust.checkatrade.url
+  }), stats) -%}
+{%- endif -%}
+{%- set stats = (stats.push({ "v": tps.trust.fixedQuotesValue, "l": tps.trust.fixedQuotesLabel }), stats) -%}
+{%- if tps.trust.insuranceConfirmed -%}
+  {%- set stats = (stats.push({ "v": tps.trust.insuredValue, "l": tps.trust.insuredLabel }), stats) -%}
+{%- endif -%}
+
+{%- if stats.length %}
+<div class="hero__foot" data-reveal-group>
+  {%- for s in stats %}
+  <div class="hero-stat" data-reveal>
+    {%- if s.url %}
+    <a class="hero-stat__link" href="{{ s.url }}" target="_blank" rel="noopener">
+      <b>{{ s.v }}</b><span>{{ s.l }} <span class="hero-stat__ext" aria-hidden="true">&#8599;</span></span>
+    </a>
+    {%- else %}
+    <b{% if s.count %} data-count{% endif %}>{{ s.v }}</b>
+    <span>{{ s.l }}</span>
+    {%- endif %}
+  </div>
+  {%- endfor %}
+</div>
+{%- endif %}

@@ -1,0 +1,37 @@
+{#- Optional context:
+      gridArea  — an area object, to point links at the town+service page
+      compact   — true on the homepage. Seven services with full bullet lists
+                  made the homepage services block a quarter of the whole page
+                  on a phone. The bullets and the price line belong on the
+                  service page, where someone has already chosen the trade. -#}
+{#- float — true on /services/: the cards drift and lift like the homepage orb
+    panels (same keyframes, same shadow-sync technique). -#}
+<div class="grid grid--3{% if float %} grid--float{% endif %}">
+  {%- for s in tps.services %}
+  {%- set target = s.url -%}
+  {%- if gridArea -%}
+    {%- for lp in tps.locationPages -%}
+      {%- if lp.area.slug == gridArea.slug and lp.service.slug == s.slug -%}{%- set target = lp.url -%}{%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+  <article class="card">
+    <div class="card__media">
+      {% image s.image, s.imageAlt, "(min-width: 900px) 33vw, (min-width: 640px) 50vw, 100vw" %}
+    </div>
+    <div class="card__body">
+      {%- if s.eyebrow %}<span class="eyebrow">{{ s.eyebrow }}</span>{% endif %}
+      <h3>{{ s.name }}{% if gridArea %} in {{ gridArea.name }}{% endif %}</h3>
+      <p>{{ s.cardSummary }}</p>
+      {%- if s.bullets.length and not compact %}
+      <ul class="card__list">
+        {%- for b in s.bullets %}<li>{{ b }}</li>{% endfor %}
+      </ul>
+      {%- endif %}
+      {%- if s.priceFrom and not compact %}
+      <p class="price-from"><small>{{ s.priceLabel }}</small>{{ s.priceFrom }}</p>
+      {%- endif %}
+      <a class="card__link" href="{{ target }}">Get a fixed price<span class="visually-hidden"> for {{ s.name }}{% if gridArea %} in {{ gridArea.name }}{% endif %}</span></a>
+    </div>
+  </article>
+  {%- endfor %}
+</div>
