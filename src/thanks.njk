@@ -1,0 +1,17 @@
+---
+layout: base.njk
+pageKey: thanks
+permalink: /thanks/
+noindex: true
+---
+{% from "icons.njk" import phone %}
+<section class="section">
+  <div class="container container--narrow prose">
+    <h1>{{ tps.pages.thanks.h1 }}</h1>
+    <p class="lede">{{ tps.pages.thanks.body }}</p>
+    <div class="btn-row">
+      <a class="btn btn--primary" href="/">Back to the homepage</a>
+      <a class="btn btn--secondary" href="{{ tps.derived.telHref }}">{{ phone() }} {{ tps.contact.phoneDisplay }}</a>
+    </div>
+  </div>
+</section>

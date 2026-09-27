@@ -1,0 +1,23 @@
+---
+layout: base.njk
+pageKey: services
+permalink: /services/
+---
+{% include "breadcrumbs.njk" %}
+
+<section class="page-head">
+  <div class="container">
+    <h1>{{ tps.pages.services.h1 }}</h1>
+    <p>{{ tps.pages.services.intro }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head"><h2>{{ tps.pages.services.gridHeading }}</h2></div>
+    {% set float = true %}
+    {% include "services-grid.njk" %}
+  </div>
+</section>
+
+{% include "cta-band.njk" %}

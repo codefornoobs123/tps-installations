@@ -1,0 +1,77 @@
+---
+layout: base.njk
+schemaType: area
+pagination:
+  data: tps.areas
+  size: 1
+  addAllPagesToCollections: true
+  alias: area
+permalink: "{{ area.url }}"
+---
+{% from "icons.njk" import phone %}
+{% include "breadcrumbs.njk" %}
+
+<section class="page-head">
+  <div class="container">
+    <h1>{{ tps.site.name }} in {{ area.name }}</h1>
+    <p>{{ area.intro }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="local-note">
+      <p><strong>Local to {{ area.name }}:</strong> {{ area.localReference }}</p>
+    </div>
+
+    <div class="section-head">
+      <h2>What we do in {{ area.name }}</h2>
+    </div>
+    {% set gridArea = area %}
+    {% include "services-grid.njk" %}
+  </div>
+</section>
+
+{%- set areaGallery = tps.gallery | where("area", area.slug) -%}
+{%- if areaGallery.length %}
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-head">
+      <h2>Recent work in {{ area.name }}</h2>
+    </div>
+    {% set galleryItems = areaGallery %}
+    {% include "gallery.njk" %}
+  </div>
+</section>
+{%- endif %}
+
+<section class="section">
+  <div class="container">
+    <div class="split">
+      <div class="prose">
+        <h2>Getting a quote in {{ area.name }}</h2>
+        <p>{{ tps.contact.responseTimePromise }}</p>
+        <ul class="tick-list">
+          {%- for b in tps.services %}<li>{{ b.name }} across {{ area.postcodes or area.name }}</li>{% endfor %}
+        </ul>
+        <p><a class="btn btn--secondary" href="{{ tps.derived.telHref }}">{{ phone() }} {{ tps.contact.phoneDisplay }}</a></p>
+
+        <h2>Other areas we cover</h2>
+        <ul class="link-cloud">
+          {%- for a in tps.areas %}{% if a.slug != area.slug %}
+          <li><a href="{{ a.url }}">{{ a.name }}</a></li>
+          {%- endif %}{% endfor %}
+        </ul>
+      </div>
+      <div>
+        <div class="sticky-side">
+          {% set formId = "town-" + area.slug %}
+          {% set formHeading = "Free quote in " + area.name %}
+          {% include "quote-form.njk" %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include "cta-band.njk" %}

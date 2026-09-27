@@ -1,0 +1,35 @@
+---
+layout: base.njk
+pageKey: areas
+permalink: /areas/
+---
+{% include "breadcrumbs.njk" %}
+
+<section class="page-head">
+  <div class="container">
+    <h1>{{ tps.pages.areas.h1 }}</h1>
+    <p>{{ tps.pages.areas.intro }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    {% include "areas.njk" %}
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-head">
+      <h2>Every service, every town</h2>
+      <p>Straight to the page for what you need, where you need it.</p>
+    </div>
+    <ul class="link-cloud">
+      {%- for lp in tps.locationPages %}
+      <li><a href="{{ lp.url }}">{{ lp.service.shortName or lp.service.name }} in {{ lp.area.name }}</a></li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
+
+{% include "cta-band.njk" %}

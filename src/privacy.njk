@@ -1,0 +1,22 @@
+---
+layout: base.njk
+pageKey: privacy
+permalink: /privacy/
+---
+{% include "breadcrumbs.njk" %}
+<section class="section">
+  <div class="container container--narrow prose">
+    <h1>{{ tps.pages.privacy.h1 }}</h1>
+    <p><small>Last updated: {{ tps.pages.privacy.lastUpdated }}</small></p>
+    {%- if "[" in tps.pages.privacy.body %}
+    <div class="notice">
+      <p><strong>Placeholder.</strong> Replace <code>pages.privacy.body</code> in content.json with a real UK GDPR privacy policy before going live.</p>
+    </div>
+    {%- endif %}
+    {#- A paragraph starting "## " becomes a sub-heading. -#}
+    {% for p in tps.pages.privacy.body | paras %}{% if p.slice(0, 3) == "## " %}<h2>{{ p.slice(3) }}</h2>{% else %}<p>{{ p }}</p>{% endif %}{% endfor %}
+    <h2>Contact</h2>
+    <p>{{ tps.site.legalName }}, {{ tps.derived.addressLine }}</p>
+    <p><a href="{{ tps.derived.telHref }}">{{ tps.contact.phoneDisplay }}</a>{% if tps.contact.email %} &middot; <a href="mailto:{{ tps.contact.email }}">{{ tps.contact.email }}</a>{% endif %}</p>
+  </div>
+</section>

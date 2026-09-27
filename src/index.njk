@@ -1,0 +1,151 @@
+---
+layout: base.njk
+pageKey: home
+permalink: /
+schemaType: home
+faqScope: global
+---
+{#- Seven sections, down from thirteen.
+
+    The old homepage ran hero, strip, about, services, differentiator, gallery,
+    process, form, testimonials, credentials, areas, FAQ, CTA — thirteen blocks
+    with near-identical section heads, which is what made it feel endless.
+
+    Now each stop does one job and looks different from its neighbours:
+      1  hero          — who, what, where, and two ways to make contact
+      2  what we do    — the seven services
+      3  the work      — real photographs, no captions until Kevin supplies them
+      4  underneath    — the dark band. Also the visual midpoint of the page.
+      5  who you are   — the owner, the credentials, the Checkatrade score
+      6  how it runs   — the five stages, then the questions people ask
+      7  quote         — the form
+
+    Areas covered moved to the footer, where it already existed. -#}
+{% from "icons.njk" import phone %}
+{%- set h = tps.pages.home -%}
+
+{# ── 1 ─────────────────────────────────────────────── hero ── #}
+<section class="hero" data-hero>
+  <div class="hero__media">
+    {% image h.heroImage, h.heroImageAlt, "100vw", null, "eager", "high" %}
+  </div>
+  <div class="container hero__inner">
+    <p class="eyebrow">{{ h.heroEyebrow }}</p>
+    <h1 class="hero__title">{% if h.heroHeadlineAccent %}{{ h.heroHeadline | replace(h.heroHeadlineAccent, "<em>" + h.heroHeadlineAccent + "</em>") | safe }}{% else %}{{ h.heroHeadline }}{% endif %}</h1>
+    <p class="hero__sub">{{ h.heroSubheadline }}</p>
+    <div class="btn-row">
+      <a class="btn btn--on-dark" href="{{ tps.cta.primaryUrl }}">{{ tps.cta.primaryLabel }}</a>
+      <a class="btn btn--ghost-light" href="/gallery/">See the work</a>
+    </div>
+    {% include "hero-stats.njk" %}
+    <span class="scroll-cue" aria-hidden="true">Scroll<i></i></span>
+  </div>
+</section>
+
+{% include "strip.njk" %}
+
+{# ── 2 ────────────────────────────────────────── what we do ── #}
+<section class="section" id="what-we-do">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">{{ h.servicesEyebrow }}</p>
+      <h2>{{ h.servicesHeading }}</h2>
+      <p>{{ h.servicesIntro }}</p>
+    </div>
+    <div data-reveal>{% include "services-orb.njk" %}</div>
+  </div>
+</section>
+
+{# ── 3 ─────────────────────────────────────────── the work ── #}
+<section class="section section--alt" id="work">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">{{ h.galleryEyebrow }}</p>
+      <h2>{{ h.galleryHeading }}</h2>
+      <p>{{ h.galleryIntro }}</p>
+    </div>
+    {% set workItems = tps.work | limit(6) %}
+    {% include "work-grid.njk" %}
+    <p class="section-more"><a class="btn btn--secondary" href="/gallery/">See more of our work</a></p>
+  </div>
+</section>
+
+{# ── 4 ────────────────────────────────────────── underneath ── #}
+<section class="section section--dark" id="underneath">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">{{ tps.differentiator.eyebrow }}</p>
+      <h2>{{ tps.differentiator.heading }}</h2>
+      <p>{{ tps.differentiator.intro }}</p>
+    </div>
+    <div data-reveal-group>{% include "buildups.njk" %}</div>
+  </div>
+</section>
+
+{# ── 5 ───────────────────────────────── who you're dealing with ── #}
+<section class="section" id="who">
+  <div class="container">
+    <div class="split">
+      <div class="prose">
+        <p class="eyebrow">{{ h.aboutEyebrow }}</p>
+        <h2>{{ h.aboutHeading }}</h2>
+        {% for p in h.aboutBody | paras %}<p>{{ p }}</p>{% endfor %}
+        <a class="btn btn--secondary" href="/about/">More about {{ tps.site.name }}</a>
+      </div>
+      <div class="frame">
+        {% image h.aboutImage, h.aboutImageAlt, "(min-width: 940px) 40vw, 100vw" %}
+      </div>
+    </div>
+
+    <div class="subsection" data-reveal>
+      <p class="eyebrow">{{ tps.trust.credentialsEyebrow }}</p>
+      <h3>{{ tps.trust.credentialsHeading }}</h3>
+    </div>
+    <div data-reveal-group>
+      {% set itemHeading = "h4" %}
+      {% include "credentials.njk" %}
+    </div>
+    <div class="subsection-tight" data-reveal>{% include "testimonials.njk" %}</div>
+  </div>
+</section>
+
+{# ── 6 ───────────────────────────────────────── how it runs ── #}
+<section class="section section--alt" id="how">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">{{ tps.process.eyebrow }}</p>
+      <h2>{{ tps.process.heading }}</h2>
+      <p>{{ tps.process.intro }}</p>
+    </div>
+    <div data-reveal-group>{% include "process.njk" %}</div>
+
+    <div class="subsection" data-reveal>
+      <p class="eyebrow">{{ h.faqEyebrow }}</p>
+      <h3>{{ h.faqHeading }}</h3>
+    </div>
+    {% include "faq.njk" %}
+  </div>
+</section>
+
+{# ── 7 ──────────────────────────────────────────── the quote ── #}
+<section class="section" id="quote">
+  <div class="container">
+    <div class="split">
+      <div>
+        <p class="eyebrow">Free quotation</p>
+        <h2>{{ tps.form.heading }}</h2>
+        <p class="lede">{{ tps.form.intro }}</p>
+        <ul class="tick-list">
+          {%- for s in tps.services %}<li>{{ s.name }}</li>{% endfor %}
+        </ul>
+        <p><a class="btn btn--secondary" href="{{ tps.derived.telHref }}">{{ phone() }} {{ tps.contact.phoneDisplay }}</a></p>
+      </div>
+      <div>
+        {% set formId = "home" %}
+        {% include "quote-form.njk" %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include "cta-band.njk" %}

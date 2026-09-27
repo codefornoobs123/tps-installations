@@ -1,0 +1,22 @@
+---
+layout: base.njk
+pageKey: gallery
+permalink: /gallery/
+---
+{% include "breadcrumbs.njk" %}
+
+<section class="page-head">
+  <div class="container">
+    <h1>{{ tps.pages.gallery.h1 }}</h1>
+    <p>{{ tps.pages.gallery.intro }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head"><h2>{{ tps.pages.gallery.gridHeading }}</h2></div>
+    {% include "work-grid.njk" %}
+  </div>
+</section>
+
+{% include "cta-band.njk" %}

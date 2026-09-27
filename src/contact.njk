@@ -1,0 +1,55 @@
+---
+layout: base.njk
+pageKey: contact
+permalink: /contact/
+---
+{% from "icons.njk" import phone, mail, pin, whatsapp %}
+{% include "breadcrumbs.njk" %}
+
+<section class="page-head">
+  <div class="container">
+    <h1>{{ tps.pages.contact.h1 }}</h1>
+    <p>{{ tps.pages.contact.intro }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="split">
+      <div>
+        {% set formId = "contact" %}
+        {% include "quote-form.njk" %}
+      </div>
+      <div class="prose">
+        <h2>Prefer to talk?</h2>
+        <p class="btn-row">
+          <a class="btn btn--primary" href="{{ tps.derived.telHref }}">{{ phone() }} {{ tps.contact.phoneDisplay }}</a>
+        </p>
+        {%- if tps.derived.waHref %}
+        <p class="btn-row">
+          <a class="btn btn--secondary" href="{{ tps.derived.waHref }}" target="_blank" rel="noopener">{{ whatsapp() }} {{ tps.cta.whatsappLabel }}</a>
+        </p>
+        {%- endif %}
+
+        <h2>Contact details</h2>
+        {# NAP — must match the footer, the schema and the Google Business Profile exactly. #}
+        <address>
+          {%- if tps.contact.email %}<p>{{ mail() }} <a href="mailto:{{ tps.contact.email }}">{{ tps.contact.email }}</a></p>{% endif %}
+          <p>{{ pin() }} {{ tps.derived.addressLine }}</p>
+        </address>
+
+        <h2>Opening hours</h2>
+        <ul>
+          {%- for h in tps.contact.openingHours %}
+          <li><strong>{{ h.days }}:</strong> {{ h.hours }}</li>
+          {%- endfor %}
+        </ul>
+
+        <h2>Areas we cover</h2>
+        <ul class="link-cloud">
+          {%- for a in tps.areas %}<li><a href="{{ a.url }}">{{ a.name }}</a></li>{% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

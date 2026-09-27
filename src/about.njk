@@ -1,0 +1,55 @@
+---
+layout: base.njk
+pageKey: about
+permalink: /about/
+---
+{% from "icons.njk" import phone %}
+{% include "breadcrumbs.njk" %}
+
+<section class="page-head">
+  <div class="container">
+    <h1>{{ tps.pages.about.h1 }}</h1>
+    <p>{{ tps.pages.about.intro }}</p>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container">
+    <div class="split">
+      <div class="prose">
+        {% for p in tps.pages.about.body | paras %}<p>{{ p }}</p>{% endfor %}
+        <p><a class="btn btn--primary" href="{{ tps.cta.primaryUrl }}">{{ tps.cta.primaryLabel }}</a></p>
+      </div>
+      <div>
+        {% image tps.pages.about.image, tps.pages.about.imageAlt, "(min-width: 940px) 40vw, 100vw", "rounded" %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-head"><h2>{{ tps.pages.about.valuesHeading }}</h2></div>
+    <div class="grid grid--3">
+      {%- for v in tps.pages.about.values %}
+      <div>
+        <h3>{{ v.title }}</h3>
+        <p>{{ v.body }}</p>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">{{ tps.trust.credentialsEyebrow }}</p>
+      <h2>{{ tps.trust.credentialsHeading }}</h2>
+    </div>
+    {% include "credentials.njk" %}
+  </div>
+</section>
+
+{% include "cta-band.njk" %}

@@ -1,0 +1,9 @@
+---
+permalink: /robots.txt
+eleventyExcludeFromCollections: true
+---
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+{% if tps.derived.siteUrlSet %}Sitemap: {{ "/sitemap.xml" | absUrl(tps.derived.siteUrl) }}{% endif %}

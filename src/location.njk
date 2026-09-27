@@ -1,0 +1,87 @@
+---
+layout: base.njk
+schemaType: location
+pagination:
+  data: tps.locationPages
+  size: 1
+  addAllPagesToCollections: true
+  alias: loc
+permalink: "{{ loc.url }}"
+---
+{% from "icons.njk" import phone %}
+{% include "breadcrumbs.njk" %}
+
+<section class="page-head">
+  <div class="container">
+    <h1>{{ loc.h1 }}</h1>
+    <p>{{ loc.service.cardSummary }}</p>
+  </div>
+</section>
+
+{% include "strip.njk" %}
+
+<section class="section">
+  <div class="container">
+    <div class="split">
+      <div class="prose">
+        {% for p in loc.intro | paras %}<p>{{ p }}</p>{% endfor %}
+
+        <div class="local-note">
+          <p><strong>{{ loc.area.name }} specifics:</strong> {{ loc.localReference }}</p>
+        </div>
+
+        <h2>What {{ loc.service.name | lower }} includes</h2>
+        <ul class="tick-list">
+          {%- for b in loc.service.bullets %}<li>{{ b }}</li>{% endfor %}
+        </ul>
+
+        <h2>More on {{ loc.service.name | lower }}</h2>
+        <p>{{ loc.service.intro }}</p>
+        <p><a href="{{ loc.service.url }}">Full {{ loc.service.name | lower }} details</a> &middot; <a href="{{ loc.area.url }}">Everything we do in {{ loc.area.name }}</a></p>
+
+        <h2>{{ loc.service.shortName or loc.service.name }} in nearby towns</h2>
+        <ul class="link-cloud">
+          {%- for other in tps.locationPages %}
+            {%- if other.service.slug == loc.service.slug and other.area.slug != loc.area.slug %}
+          <li><a href="{{ other.url }}">{{ other.area.name }}</a></li>
+            {%- endif %}
+          {%- endfor %}
+        </ul>
+
+        <h2>Other services in {{ loc.area.name }}</h2>
+        <ul class="link-cloud">
+          {%- for other in tps.locationPages %}
+            {%- if other.area.slug == loc.area.slug and other.service.slug != loc.service.slug %}
+          <li><a href="{{ other.url }}">{{ other.service.shortName or other.service.name }}</a></li>
+            {%- endif %}
+          {%- endfor %}
+        </ul>
+      </div>
+
+      <div>
+        <div class="sticky-side">
+          {% set formId = "loc-" + loc.area.slug + "-" + loc.service.slug %}
+          {% set formHeading = loc.service.name + " in " + loc.area.name %}
+          {% set prefillService = loc.service.slug %}
+          {% include "quote-form.njk" %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- if loc.gallery.length %}
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-head"><h2>Work like this</h2></div>
+    {% set galleryItems = loc.gallery | limit(3) %}
+    {% include "gallery.njk" %}
+  </div>
+</section>
+{%- endif %}
+
+{%- set locTestimonials = tps.testimonials | where("service", loc.service.slug) -%}
+{%- if locTestimonials.length %}
+{%- endif %}
+
+{% include "cta-band.njk" %}

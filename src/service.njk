@@ -1,0 +1,70 @@
+---
+layout: base.njk
+schemaType: service
+pagination:
+  data: tps.services
+  size: 1
+  addAllPagesToCollections: true
+  alias: service
+permalink: "{{ service.url }}"
+---
+{% from "icons.njk" import phone %}
+{% include "breadcrumbs.njk" %}
+
+<section class="page-head">
+  <div class="container">
+    <h1>{{ service.h1 }}</h1>
+    <p>{{ service.intro }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="split">
+      <div class="prose">
+        {% image service.image, service.imageAlt, "(min-width: 940px) 58vw, 100vw", "rounded service-hero", "eager", "high" %}
+        {% for p in service.body | paras %}<p>{{ p }}</p>{% endfor %}
+
+        <h2>What's included</h2>
+        <ul class="tick-list">
+          {%- for b in service.bullets %}<li>{{ b }}</li>{% endfor %}
+        </ul>
+        {%- if service.priceFrom %}<p class="price-from"><small>{{ service.priceLabel }}</small>{{ service.priceFrom }}</p>{% endif %}
+
+        <h2>{{ service.name }} near you</h2>
+        <p>We cover {{ tps.areas | length }} towns across {{ tps.areas[0].county }}. Pick yours for local detail and recent jobs:</p>
+        <ul class="link-cloud">
+          {%- for lp in tps.locationPages %}
+            {%- if lp.service.slug == service.slug %}
+          <li><a href="{{ lp.url }}">{{ service.shortName or service.name }} in {{ lp.area.name }}</a></li>
+            {%- endif %}
+          {%- endfor %}
+        </ul>
+      </div>
+
+      <div>
+        <div class="sticky-side">
+          {% set formId = "svc-" + service.slug %}
+          {% set formHeading = "Get a quote for " + service.name | lower %}
+          {% set prefillService = service.slug %}
+          {% include "quote-form.njk" %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- set svcGallery = tps.gallery | where("service", service.slug) -%}
+{%- if svcGallery.length %}
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-head">
+      <h2>Recent {{ service.name | lower }}</h2>
+    </div>
+    {% set galleryItems = svcGallery %}
+    {% include "gallery.njk" %}
+  </div>
+</section>
+{%- endif %}
+
+{% include "cta-band.njk" %}

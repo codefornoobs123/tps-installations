@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Content Manager: TPS Installations</title>
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+  <script src="https://unpkg.com/decap-cms@^3.9.0/dist/decap-cms.js"></script>
+  <script>
+    // Send an invited user straight into the CMS once they've set a password.
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", function (user) {
+        if (!user) {
+          window.netlifyIdentity.on("login", function () { document.location.href = "/admin/"; });
+        }
+      });
+    }
+  </script>
+</body>
+</html>

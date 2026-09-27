@@ -1,0 +1,21 @@
+---
+layout: base.njk
+pageKey: notFound
+permalink: /404.html
+noindex: true
+---
+<section class="section">
+  <div class="container container--narrow prose">
+    <h1>{{ tps.pages.notFound.h1 }}</h1>
+    <p class="lede">{{ tps.pages.notFound.body }}</p>
+    <h2>Our services</h2>
+    <ul class="link-cloud">
+      {%- for s in tps.services %}<li><a href="{{ s.url }}">{{ s.name }}</a></li>{% endfor %}
+    </ul>
+    <h2>Areas we cover</h2>
+    <ul class="link-cloud">
+      {%- for a in tps.areas %}<li><a href="{{ a.url }}">{{ a.name }}</a></li>{% endfor %}
+    </ul>
+    <p style="margin-top:var(--sp-6)"><a class="btn btn--primary" href="{{ tps.cta.primaryUrl }}">{{ tps.cta.primaryLabel }}</a></p>
+  </div>
+</section>
