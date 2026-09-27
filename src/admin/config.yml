@@ -3,12 +3,16 @@
 #
 # IMPORTANT: Decap writes back ONLY the fields declared below. If you add a
 # field to content.json and not here, the CMS DELETES it the next time anyone
-# saves. Run 'npm run check' — tools/check-cms.js catches exactly that.
-#
-# Layout: sections are ordered by how often they get edited. Everyday stuff
-# first, page text in the middle, technical settings last under ⚙️.
+# saves. Run `npm run check` — tools/check-cms.js catches exactly that.
 # =============================================================================
 
+# --- BACKEND -----------------------------------------------------------------
+# Netlify Identity + Git Gateway. Editors log in with an email invite; no
+# GitHub account needed. Saving commits to the repo and Netlify redeploys.
+#
+# Netlify has DEPRECATED Git Gateway: it still works and still gets security
+# fixes, but no more bug fixes. To move off it later, replace this whole block
+# with one of the alternatives in README.md — nothing else in this file changes.
 backend:
   name: git-gateway
   branch: main
@@ -16,598 +20,591 @@ backend:
     update: 'Content: update {{collection}} “{{slug}}”'
     openAuthoring: 'Content: {{message}}'
 
+# Turn this on to edit locally with `npx decap-server` running.
 # local_backend: true
 
 media_folder: "src/assets/img"
 public_folder: "/assets/img"
 
 publish_mode: simple
-site_url: https://tpsinstallations.netlify.app
-display_url: https://tpsinstallations.netlify.app
+site_url: https://example.netlify.app   # replace with the live domain
+display_url: https://example.netlify.app
 logo_url: /assets/img/logo.svg
 
 collections:
   - name: "content"
-    label: "✏️ Edit your website"
-    label_singular: "website"
+    label: "Website content"
     delete: false
     editor:
       preview: false
     files:
       - name: "settings"
-        label: "Your website — all pages & details"
+        label: "Everything"
         file: "content.json"
-        description: "Open a section, make your change, then press Publish at the top. The live site updates about 2 minutes later."
+        description: "All site copy, contact details, services, towns, reviews and SEO."
         fields:
           - { name: "_README", label: "Internal notes (leave alone)", widget: "hidden" }
 
-          # ===============================================================
-          # EVERYDAY
-          # ===============================================================
-          - name: "contact"
-            label: "📞 Phone, email & opening hours"
-            widget: "object"
-            collapsed: true
-            hint: "Keep these exactly the same as your Google Business Profile."
-            fields:
-              - { name: "phoneDisplay", label: "Phone number (as people see it)", widget: "string", hint: "e.g. 07971 088302" }
-              - { name: "phoneLink", label: "Phone number (for the tap-to-call button)", widget: "string", hint: "International format, no spaces, e.g. +447971088302" }
-              - { name: "email", label: "Email address", widget: "string" }
-              - { name: "whatsappNumber", label: "WhatsApp number", widget: "string", hint: "Digits only, e.g. 447971088302" }
-              - { name: "whatsappMessage", label: "Message that's pre-typed when someone opens WhatsApp", widget: "string" }
-              - name: "openingHours"
-                label: "Opening hours"
-                widget: "list"
-                collapsed: true
-                summary: "{{fields.days}}: {{fields.hours}}"
-                fields:
-                  - { name: "days", label: "Days", widget: "string", hint: "e.g. Monday to Friday" }
-                  - { name: "hours", label: "Hours", widget: "string", hint: "e.g. 7:30am to 6pm, or Closed" }
-                  - { name: "schema", label: "Google format (optional)", widget: "string", required: false, hint: "e.g. Mo-Fr 07:30-18:00. Leave blank for closed days." }
-              - { name: "responseTimePromise", label: "How quickly you reply", widget: "text" }
-              - { name: "freeEstimates", label: "Free quotes line", widget: "string", required: false }
-              - name: "address"
-                label: "Business address"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { name: "street", label: "Street", widget: "string", required: false }
-                  - { name: "locality", label: "Town", widget: "string" }
-                  - { name: "region", label: "County", widget: "string" }
-                  - { name: "postcode", label: "Postcode", widget: "string" }
-                  - { name: "country", label: "Country code", widget: "string", default: "GB" }
-              - { name: "serviceRadiusMiles", label: "How far you travel (miles)", widget: "number", value_type: "int" }
-              - { name: "checkatradeUrl", label: "Checkatrade profile link", widget: "string", required: false }
-              - { name: "googleReviewsUrl", label: "Google reviews link", widget: "string", required: false }
-              - { name: "googleBusinessProfileUrl", label: "Google Business Profile link", widget: "string", required: false }
-              - { name: "googleRating", label: "Google star rating", widget: "string", required: false, hint: "e.g. 4.9" }
-              - { name: "googleReviewCount", label: "Number of Google reviews", widget: "string", required: false }
-              - name: "geo"
-                label: "Map pin (latitude / longitude)"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { name: "latitude", label: "Latitude", widget: "number", value_type: "float" }
-                  - { name: "longitude", label: "Longitude", widget: "number", value_type: "float" }
-
-          - name: "testimonials"
-            label: "⭐ Customer reviews"
-            label_singular: "review"
-            widget: "list"
-            collapsed: true
-            summary: "{{fields.rating}}★  {{fields.name}}, {{fields.location}}"
-            hint: "Real reviews only. Made-up reviews are illegal in the UK."
-            fields:
-              - { name: "quote", label: "What they said", widget: "text" }
-              - { name: "name", label: "Customer name", widget: "string", hint: "e.g. Sarah T." }
-              - { name: "location", label: "Their town", widget: "string" }
-              - { name: "rating", label: "Stars (1 to 5)", widget: "number", value_type: "int", min: 1, max: 5 }
-              - { name: "date", label: "Date", widget: "string", required: false }
-              - { name: "service", label: "Which service (optional)", widget: "string", required: false, hint: "Use the service's web address name, e.g. driveways-paving" }
-
-          - name: "work"
-            label: "📸 Photos of our work"
-            label_singular: "photo"
-            widget: "list"
-            collapsed: true
-            summary: "{{fields.alt}}"
-            hint: "The first six show on the homepage; all of them show on the gallery page. Drag to reorder."
-            fields:
-              - { name: "image", label: "Photo", widget: "image" }
-              - { name: "alt", label: "Describe the photo", widget: "string", hint: "What's actually in the picture, e.g. Block-paved driveway with granite edging" }
-              - { name: "id", label: "Reference (any unique word)", widget: "string", hint: "e.g. driveway-3" }
-
-          - name: "gallery"
-            label: "🔁 Before & after photos"
-            label_singular: "before & after"
-            widget: "list"
-            collapsed: true
-            summary: "{{fields.title}}"
-            fields:
-              - { name: "title", label: "Job title", widget: "string" }
-              - { name: "caption", label: "Short description", widget: "text" }
-              - { name: "beforeImage", label: "Before photo", widget: "image", required: false }
-              - { name: "beforeAlt", label: "Describe the before photo", widget: "string" }
-              - { name: "afterImage", label: "After photo", widget: "image", required: false }
-              - { name: "afterAlt", label: "Describe the after photo", widget: "string" }
-              - { name: "service", label: "Which service (optional)", widget: "string", required: false }
-              - { name: "area", label: "Which town (optional)", widget: "string", required: false }
-              - { name: "id", label: "Reference (any unique word)", widget: "string" }
-
-          - name: "faqs"
-            label: "❓ Questions & answers"
-            label_singular: "question"
-            widget: "list"
-            collapsed: true
-            summary: "{{fields.question}}"
-            hint: "Google can show these directly in search results."
-            fields:
-              - { name: "question", label: "Question", widget: "string" }
-              - { name: "answer", label: "Answer", widget: "text" }
-              - { name: "scope", label: "Scope", widget: "select", options: ["global"], default: "global" }
-
-          # ===============================================================
-          # SERVICES & AREAS
-          # ===============================================================
-          - name: "services"
-            label: "🛠️ Services"
-            label_singular: "service"
-            widget: "list"
-            collapsed: true
-            summary: "{{fields.name}}"
-            hint: "Each service gets its own page. Adding one creates a new page on the site."
-            fields:
-              - { name: "name", label: "Service name", widget: "string" }
-              - { name: "shortName", label: "Short name (used in menus)", widget: "string" }
-              - { name: "image", label: "Photo", widget: "image", required: false }
-              - { name: "imageAlt", label: "Describe the photo", widget: "string" }
-              - { name: "eyebrow", label: "Small line above the card title", widget: "string", required: false }
-              - { name: "cardSummary", label: "Card text (homepage & services page)", widget: "text" }
-              - { name: "h1", label: "Page headline", widget: "string" }
-              - { name: "intro", label: "Opening paragraph (40–60 words)", widget: "text" }
-              - { name: "body", label: "Main text", widget: "text", hint: "Leave an empty line between paragraphs." }
-              - { name: "bullets", label: "What's included", widget: "list", collapsed: false, field: { name: "point", label: "Point", widget: "string" } }
-              - { name: "priceLabel", label: "Price heading", widget: "string", required: false }
-              - { name: "priceFrom", label: "Price from", widget: "string", required: false, hint: "Leave blank to hide prices on this page." }
-              - { name: "slug", label: "Web address", widget: "string", hint: "Lowercase and hyphens only, e.g. driveways-paving. Changing this changes the page's link.", pattern: ['^[a-z0-9]+(-[a-z0-9]+)*$', "Lowercase letters, numbers and hyphens only"] }
-              - name: "seo"
-                label: "Google search listing"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { name: "title", label: "Title in Google (max 60 characters)", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] }
-                  - { name: "description", label: "Description in Google (max 155 characters)", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] }
-
-          - name: "areas"
-            label: "📍 Towns you cover"
-            label_singular: "town"
-            widget: "list"
-            collapsed: true
-            summary: "{{fields.name}}"
-            hint: "Each town gets its own page."
-            fields:
-              - { name: "name", label: "Town name", widget: "string" }
-              - { name: "county", label: "County", widget: "string" }
-              - { name: "postcodes", label: "Postcodes covered", widget: "string", required: false }
-              - { name: "intro", label: "Opening paragraph (40–60 words, different for every town)", widget: "text" }
-              - { name: "localReference", label: "Something local and true", widget: "text", hint: "e.g. a road you've worked on or a local detail" }
-              - { name: "slug", label: "Web address", widget: "string", hint: "Lowercase and hyphens only, e.g. ferndown", pattern: ['^[a-z0-9]+(-[a-z0-9]+)*$', "Lowercase letters, numbers and hyphens only"] }
-              - name: "seo"
-                label: "Google search listing"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { name: "title", label: "Title in Google (max 60 characters)", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] }
-                  - { name: "description", label: "Description in Google (max 155 characters)", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] }
-
-          - name: "locationPages"
-            label: "🗺️ Town + service pages (e.g. Roofing in Poole)"
-            label_singular: "town + service page"
-            widget: "list"
-            collapsed: true
-            summary: "{{fields.h1}}"
-            hint: "Every page needs its own wording. Copy-pasted text gets ignored by Google."
-            fields:
-              - { name: "h1", label: "Page headline", widget: "string" }
-              - { name: "intro", label: "Main text (120–180 words, unique)", widget: "text" }
-              - { name: "localReference", label: "Something local and true", widget: "text" }
-              - { name: "areaSlug", label: "Town web address", widget: "string", hint: "Must match a town's web address, e.g. poole" }
-              - { name: "serviceSlug", label: "Service web address", widget: "string", hint: "Must match a service's web address, e.g. roofing" }
-              - name: "seo"
-                label: "Google search listing"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { name: "title", label: "Title in Google (max 60 characters)", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] }
-                  - { name: "description", label: "Description in Google (max 155 characters)", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] }
-
-          # ===============================================================
-          # PAGE TEXT
-          # ===============================================================
-          - name: "pages"
-            label: "📄 Page text (headings & paragraphs)"
-            widget: "object"
-            collapsed: true
-            hint: "Open the page you want to change."
-            fields:
-              - name: "home"
-                label: "🏠 Homepage"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { name: "heroEyebrow", label: "Top: small line above the headline", widget: "string" }
-                  - { name: "heroHeadline", label: "Top: big headline", widget: "string" }
-                  - { name: "heroHeadlineAccent", label: "Top: word in the headline to show in italics", widget: "string", required: false }
-                  - { name: "heroSubheadline", label: "Top: paragraph under the headline", widget: "text" }
-                  - { name: "heroImage", label: "Top: background photo", widget: "image", required: false }
-                  - { name: "heroImageAlt", label: "Top: describe the photo", widget: "string" }
-                  - { name: "servicesEyebrow", label: "Services: small line", widget: "string" }
-                  - { name: "servicesHeading", label: "Services: heading", widget: "string" }
-                  - { name: "servicesIntro", label: "Services: paragraph", widget: "text" }
-                  - { name: "galleryEyebrow", label: "Photos: small line", widget: "string" }
-                  - { name: "galleryHeading", label: "Photos: heading", widget: "string" }
-                  - { name: "galleryIntro", label: "Photos: paragraph", widget: "text" }
-                  - { name: "aboutEyebrow", label: "About: small line", widget: "string" }
-                  - { name: "aboutHeading", label: "About: heading", widget: "string" }
-                  - { name: "aboutBody", label: "About: paragraph", widget: "text" }
-                  - { name: "aboutImage", label: "About: photo", widget: "image", required: false }
-                  - { name: "aboutImageAlt", label: "About: describe the photo", widget: "string" }
-                  - { name: "testimonialsEyebrow", label: "Reviews: small line", widget: "string" }
-                  - { name: "testimonialsHeading", label: "Reviews: heading", widget: "string" }
-                  - { name: "testimonialsIntro", label: "Reviews: paragraph", widget: "text", required: false }
-                  - { name: "areasEyebrow", label: "Towns: small line", widget: "string" }
-                  - { name: "areasHeading", label: "Towns: heading", widget: "string" }
-                  - { name: "areasIntro", label: "Towns: paragraph", widget: "text" }
-                  - { name: "faqEyebrow", label: "Questions: small line", widget: "string" }
-                  - { name: "faqHeading", label: "Questions: heading", widget: "string" }
-                  - { name: "faqIntro", label: "Questions: paragraph", widget: "text", required: false }
-                  - { name: "seo", label: "Google search listing", widget: "object", collapsed: true, fields: [
-                      { name: "title", label: "Title in Google (max 60 characters)", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] },
-                      { name: "description", label: "Description in Google (max 155 characters)", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] } ] }
-              - name: "about"
-                label: "👷 About page"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { name: "h1", label: "Headline", widget: "string" }
-                  - { name: "intro", label: "Opening paragraph", widget: "text" }
-                  - { name: "body", label: "Main text", widget: "text" }
-                  - { name: "image", label: "Photo", widget: "image", required: false }
-                  - { name: "imageAlt", label: "Describe the photo", widget: "string" }
-                  - { name: "valuesHeading", label: "Values heading", widget: "string" }
-                  - { name: "values", label: "Values", widget: "list", collapsed: true, summary: "{{fields.title}}", fields: [
-                      { name: "title", label: "Title", widget: "string" },
-                      { name: "body", label: "Text", widget: "text" } ] }
-                  - { name: "seo", label: "Google search listing", widget: "object", collapsed: true, fields: [
-                      { name: "title", label: "Title in Google (max 60 characters)", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] },
-                      { name: "description", label: "Description in Google (max 155 characters)", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] } ] }
-              - name: "services"
-                label: "🛠️ Services page (the list of all services)"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { name: "h1", label: "Headline", widget: "string" }
-                  - { name: "intro", label: "Opening paragraph", widget: "text" }
-                  - { name: "gridHeading", label: "Heading above the services", widget: "string" }
-                  - { name: "seo", label: "Google search listing", widget: "object", collapsed: true, fields: [
-                      { name: "title", label: "Title in Google (max 60 characters)", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] },
-                      { name: "description", label: "Description in Google (max 155 characters)", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] } ] }
-              - name: "gallery"
-                label: "📸 Gallery page"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { name: "h1", label: "Headline", widget: "string" }
-                  - { name: "intro", label: "Opening paragraph", widget: "text" }
-                  - { name: "gridHeading", label: "Heading above the photos", widget: "string" }
-                  - { name: "seo", label: "Google search listing", widget: "object", collapsed: true, fields: [
-                      { name: "title", label: "Title in Google (max 60 characters)", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] },
-                      { name: "description", label: "Description in Google (max 155 characters)", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] } ] }
-              - name: "areas"
-                label: "📍 Areas page (the list of all towns)"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { name: "h1", label: "Headline", widget: "string" }
-                  - { name: "intro", label: "Opening paragraph", widget: "text" }
-                  - { name: "seo", label: "Google search listing", widget: "object", collapsed: true, fields: [
-                      { name: "title", label: "Title in Google (max 60 characters)", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] },
-                      { name: "description", label: "Description in Google (max 155 characters)", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] } ] }
-              - name: "contact"
-                label: "✉️ Contact page"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { name: "h1", label: "Headline", widget: "string" }
-                  - { name: "intro", label: "Opening paragraph", widget: "text" }
-                  - { name: "seo", label: "Google search listing", widget: "object", collapsed: true, fields: [
-                      { name: "title", label: "Title in Google (max 60 characters)", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] },
-                      { name: "description", label: "Description in Google (max 155 characters)", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] } ] }
-              - name: "thanks"
-                label: "✅ Thank-you page (after someone sends the form)"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { name: "h1", label: "Headline", widget: "string" }
-                  - { name: "body", label: "Text", widget: "text" }
-                  - { name: "seo", label: "Google search listing", widget: "object", collapsed: true, fields: [
-                      { name: "title", label: "Title", widget: "string" },
-                      { name: "description", label: "Description", widget: "text" } ] }
-              - name: "privacy"
-                label: "🔒 Privacy policy"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { name: "h1", label: "Headline", widget: "string" }
-                  - { name: "lastUpdated", label: "Last updated", widget: "string", required: false }
-                  - { name: "body", label: "Policy text", widget: "text" }
-                  - { name: "seo", label: "Google search listing", widget: "object", collapsed: true, fields: [
-                      { name: "title", label: "Title", widget: "string" },
-                      { name: "description", label: "Description", widget: "text" } ] }
-              - name: "notFound"
-                label: "🚧 Page-not-found (404) page"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { name: "h1", label: "Headline", widget: "string" }
-                  - { name: "body", label: "Text", widget: "text" }
-                  - { name: "seo", label: "Google search listing", widget: "object", collapsed: true, fields: [
-                      { name: "title", label: "Title", widget: "string" },
-                      { name: "description", label: "Description", widget: "text" } ] }
-
-          # ===============================================================
-          # HOMEPAGE SECTIONS
-          # ===============================================================
-          - name: "trust"
-            label: "🏅 Stats, insurance & accreditations"
-            widget: "object"
-            collapsed: true
-            fields:
-              - { name: "yearsTrading", label: "Years trading (number)", widget: "string" }
-              - { name: "yearsTradingLabel", label: "Years trading (label)", widget: "string" }
-              - { name: "projectsCompleted", label: "Jobs completed (number)", widget: "string" }
-              - { name: "projectsCompletedLabel", label: "Jobs completed (label)", widget: "string" }
-              - { name: "fixedQuotesValue", label: "Quotes stat (big text)", widget: "string" }
-              - { name: "fixedQuotesLabel", label: "Quotes stat (label)", widget: "string" }
-              - { name: "insuredValue", label: "Insurance stat (big text)", widget: "string" }
-              - { name: "insuredLabel", label: "Insurance stat (label)", widget: "string" }
-              - { name: "insuranceValue", label: "Insurer and level of cover", widget: "string" }
-              - { name: "guarantee", label: "Guarantee length", widget: "string" }
-              - { name: "wasteCarrierLicence", label: "Waste carrier licence number", widget: "string" }
-              - { name: "strapline", label: "Strapline", widget: "text" }
-              - name: "checkatrade"
-                label: "Checkatrade score"
-                widget: "object"
-                collapsed: true
-                hint: "Use the real figures from your Checkatrade profile."
-                fields:
-                  - { name: "_note", label: "Note", widget: "hidden" }
-                  - { name: "rating", label: "Score", widget: "string", hint: "e.g. 10" }
-                  - { name: "reviewCount", label: "Number of reviews", widget: "string" }
-                  - { name: "memberSince", label: "Member since", widget: "string" }
-                  - { name: "label", label: "Label", widget: "string" }
-                  - { name: "url", label: "Profile link", widget: "string" }
-              - { name: "credentialsEyebrow", label: "Credentials: small line", widget: "string" }
-              - { name: "credentialsHeading", label: "Credentials: heading", widget: "string" }
-              - name: "credentials"
-                label: "Credentials"
-                label_singular: "credential"
-                widget: "list"
-                collapsed: true
-                summary: "{{fields.title}}"
-                fields:
-                  - { name: "title", label: "Title", widget: "string" }
-                  - { name: "body", label: "Text", widget: "text" }
-                  - { name: "flag", label: "Orange 'still to confirm' badge", widget: "string", required: false, hint: "Clear this once it's confirmed and the badge disappears." }
-              - name: "accreditations"
-                label: "Accreditation logos"
-                label_singular: "accreditation"
-                widget: "list"
-                collapsed: true
-                summary: "{{fields.name}}"
-                hint: "Delete any you don't actually hold."
-                fields:
-                  - { name: "name", label: "Name", widget: "string" }
-                  - { name: "logo", label: "Logo", widget: "image", required: false }
-                  - { name: "alt", label: "Describe the logo", widget: "string" }
-                  - { name: "url", label: "Profile link", widget: "string", required: false }
-                  - { name: "membershipNumber", label: "Membership number", widget: "string", required: false }
-
-          - name: "process"
-            label: "🪜 'How it runs' steps"
-            widget: "object"
-            collapsed: true
-            fields:
-              - { name: "eyebrow", label: "Small line", widget: "string" }
-              - { name: "heading", label: "Heading", widget: "string" }
-              - { name: "intro", label: "Paragraph", widget: "text" }
-              - name: "steps"
-                label: "Steps"
-                label_singular: "step"
-                widget: "list"
-                collapsed: true
-                summary: "{{fields.title}}"
-                fields:
-                  - { name: "title", label: "Step title", widget: "string" }
-                  - { name: "body", label: "Description", widget: "text" }
-                  - { name: "timing", label: "Timing (e.g. Same day, usually)", widget: "string", required: false }
-
-          - name: "differentiator"
-            label: "🧱 'What goes underneath' section"
-            widget: "object"
-            collapsed: true
-            hint: "The build-up diagrams. Keep the numbers accurate."
-            fields:
-              - { name: "eyebrow", label: "Small line", widget: "string" }
-              - { name: "heading", label: "Heading", widget: "string" }
-              - { name: "intro", label: "Paragraph", widget: "text" }
-              - name: "buildUps"
-                label: "Build-up diagrams"
-                label_singular: "build-up"
-                widget: "list"
-                collapsed: true
-                summary: "{{fields.title}}"
-                fields:
-                  - { name: "title", label: "Title (e.g. Under a driveway)", widget: "string" }
-                  - name: "layers"
-                    label: "Layers (top to bottom)"
-                    label_singular: "layer"
-                    widget: "list"
-                    collapsed: true
-                    summary: "{{fields.label}} — {{fields.spec}}"
-                    fields:
-                      - { name: "label", label: "Layer", widget: "string" }
-                      - { name: "spec", label: "Depth / spec", widget: "string" }
-                  - { name: "note", label: "Note underneath", widget: "text" }
-              - { name: "closing", label: "Closing paragraph", widget: "text" }
-
-          - name: "strip"
-            label: "🔤 Scrolling trades banner"
-            widget: "object"
-            collapsed: true
-            hint: "The moving row of trades under the top of the homepage."
-            fields:
-              - { name: "items", label: "Trades", widget: "list", collapsed: false, field: { name: "trade", label: "Trade", widget: "string" } }
-
-          - name: "cta"
-            label: "🔘 Buttons & call-to-action banner"
-            widget: "object"
-            collapsed: true
-            fields:
-              - { name: "primaryLabel", label: "Main button text", widget: "string", hint: "e.g. Get my free quote" }
-              - { name: "primaryUrl", label: "Main button link", widget: "string" }
-              - { name: "secondaryLabel", label: "Second button text", widget: "string" }
-              - { name: "whatsappLabel", label: "WhatsApp button text", widget: "string" }
-              - { name: "bandHeading", label: "Banner heading (near the bottom of pages)", widget: "string" }
-              - { name: "bandBody", label: "Banner text", widget: "text" }
-
-          - name: "form"
-            label: "📝 Quote form wording"
-            widget: "object"
-            collapsed: true
-            fields:
-              - { name: "heading", label: "Heading", widget: "string" }
-              - { name: "intro", label: "Paragraph", widget: "text" }
-              - name: "steps"
-                label: "Step titles"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { name: "job", label: "Step 1 (type of job)", widget: "string" }
-                  - { name: "property", label: "Step 2 (postcode & details)", widget: "string" }
-                  - { name: "details", label: "Step 3 (name & phone)", widget: "string" }
-              - { name: "jobTypes", label: "Extra job choices", widget: "list", collapsed: false, field: { name: "option", label: "Option", widget: "string" }, hint: "Your services are listed automatically. Only add extras here, like Not sure yet." }
-              - { name: "callTimes", label: "Best time to call choices", widget: "list", collapsed: false, field: { name: "option", label: "Option", widget: "string" }, hint: "Leave empty to hide the question." }
-              - name: "labels"
-                label: "Question labels"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - { name: "jobType", label: "Job type question", widget: "string" }
-                  - { name: "postcode", label: "Postcode question", widget: "string" }
-                  - { name: "message", label: "Extra details question", widget: "string" }
-                  - { name: "name", label: "Name question", widget: "string" }
-                  - { name: "phone", label: "Phone question", widget: "string" }
-                  - { name: "callTime", label: "Best time to call question", widget: "string" }
-                  - { name: "optional", label: "Word shown next to optional questions", widget: "string" }
-              - { name: "submitLabel", label: "Send button text", widget: "string" }
-              - { name: "nextLabel", label: "Next button text", widget: "string" }
-              - { name: "backLabel", label: "Back button text", widget: "string" }
-              - { name: "stepCounter", label: "Step counter", widget: "string", hint: "Keep {n} and {total} in it, e.g. Step {n} of {total}" }
-              - { name: "pickJobMessage", label: "Message if they press Next without picking a job", widget: "string" }
-              - { name: "privacyNote", label: "Privacy note under the form", widget: "text" }
-
-          - name: "social"
-            label: "🔗 Social media links"
-            widget: "object"
-            collapsed: true
-            hint: "Paste the full link. Leave blank to hide that icon."
-            fields:
-              - { name: "facebook", label: "Facebook", widget: "string", required: false }
-              - { name: "instagram", label: "Instagram", widget: "string", required: false }
-              - { name: "tiktok", label: "TikTok", widget: "string", required: false }
-              - { name: "youtube", label: "YouTube", widget: "string", required: false }
-              - { name: "linkedin", label: "LinkedIn", widget: "string", required: false }
-              - { name: "x", label: "X (Twitter)", widget: "string", required: false }
-
-          # ===============================================================
-          # ADVANCED — rarely touched
-          # ===============================================================
+          # ---------------------------------------------------------------
           - name: "site"
-            label: "⚙️ Advanced: company & legal details"
+            label: "① Company"
             widget: "object"
-            collapsed: true
-            hint: "Rarely needs changing."
             fields:
               - { name: "name", label: "Company name", widget: "string" }
-              - { name: "legalName", label: "Registered company name", widget: "string" }
+              - { name: "legalName", label: "Registered legal name", widget: "string" }
+              - { name: "tagline", label: "Tagline (footer and schema)", widget: "text" }
+              - { name: "url", label: "Live site URL (no trailing slash)", widget: "string", hint: "e.g. https://tpsinstallations.co.uk — canonical tags, sitemap and Open Graph all depend on this" }
+              - { name: "locale", label: "Open Graph locale", widget: "string", default: "en_GB" }
+              - { name: "language", label: "HTML lang", widget: "string", default: "en-GB" }
               - { name: "companyNumber", label: "Company number", widget: "string", required: false }
               - { name: "registeredIn", label: "Registered in", widget: "string", required: false, hint: "e.g. England and Wales" }
-              - { name: "registeredOffice", label: "Registered office address", widget: "string", required: false, hint: "From Companies House. Required by law on the website." }
+              - { name: "registeredOffice", label: "Registered office address", widget: "string", required: false, hint: "From Companies House. The law requires it on the website." }
               - { name: "vatNumber", label: "VAT number", widget: "string", required: false }
-              - { name: "tagline", label: "Tagline (footer)", widget: "text" }
-              - { name: "logo", label: "Logo", widget: "image", required: false }
-              - { name: "logoAlt", label: "Describe the logo", widget: "string" }
+              - { name: "logo", label: "Logo mark", widget: "image", required: false }
+              - { name: "logoAlt", label: "Logo alt text", widget: "string" }
               - { name: "logoSubtitle", label: "Line under the logo", widget: "string", hint: "e.g. Ferndown · Dorset" }
-              - { name: "defaultOgImage", label: "Picture shown when the site is shared on Facebook/WhatsApp (1200×630)", widget: "image", required: false }
-              - { name: "defaultOgImageAlt", label: "Describe that picture", widget: "string" }
+              - { name: "strapline", label: "Logo strapline", widget: "string", required: false, hint: "Shown under the logo in the footer, as on the company sign." }
+              - { name: "defaultOgImage", label: "Default social share image (1200×630 JPG or PNG)", widget: "image", required: false }
+              - { name: "defaultOgImageAlt", label: "Social image alt text", widget: "string" }
+              - { name: "themeColor", label: "Browser theme colour", widget: "string" }
               - { name: "copyrightStartYear", label: "Copyright start year", widget: "number", value_type: "int" }
-              - { name: "url", label: "Website address (no slash at the end)", widget: "string", hint: "e.g. https://tpsinstallations.co.uk. Google links and the sitemap use this." }
-              - { name: "themeColor", label: "Browser bar colour on phones", widget: "string" }
-              - { name: "locale", label: "Locale", widget: "string", default: "en_GB" }
-              - { name: "language", label: "Language", widget: "string", default: "en-GB" }
-
-          - name: "nav"
-            label: "⚙️ Advanced: menu links"
-            widget: "object"
-            collapsed: true
-            fields:
-              - name: "primary"
-                label: "Main menu"
-                label_singular: "menu link"
-                widget: "list"
-                collapsed: true
-                summary: "{{fields.label}}  →  {{fields.url}}"
-                fields:
-                  - { name: "label", label: "Text", widget: "string" }
-                  - { name: "url", label: "Link", widget: "string" }
-              - name: "footerLegal"
-                label: "Footer links"
-                label_singular: "footer link"
-                widget: "list"
-                collapsed: true
-                summary: "{{fields.label}}  →  {{fields.url}}"
-                fields:
-                  - { name: "label", label: "Text", widget: "string" }
-                  - { name: "url", label: "Link", widget: "string" }
 
           - name: "seo"
-            label: "⚙️ Advanced: Google & search settings"
+            label: "② SEO defaults"
             widget: "object"
-            collapsed: true
             fields:
-              - { name: "titleSuffix", label: "Added to the end of page titles", widget: "string", hint: "Only added when the title stays under 60 characters" }
-              - { name: "defaultDescription", label: "Default Google description (max 155 characters)", widget: "text", pattern: ['^.{0,155}$', "155 characters max"] }
-              - { name: "googleSiteVerification", label: "Google Search Console code", widget: "string", required: false }
-              - { name: "bingSiteVerification", label: "Bing Webmaster code", widget: "string", required: false }
-              - { name: "twitterHandle", label: "X (Twitter) handle", widget: "string", required: false }
+              - { name: "titleSuffix", label: "Title suffix", widget: "string", hint: "Appended to page titles only when the result stays under 60 characters" }
+              - { name: "defaultDescription", label: "Fallback meta description", widget: "text", pattern: ['^.{0,155}$', "155 characters max"] }
+              - { name: "twitterHandle", label: "Twitter/X handle", widget: "string", required: false }
+              - { name: "googleSiteVerification", label: "Google Search Console verification code", widget: "string", required: false }
+              - { name: "bingSiteVerification", label: "Bing Webmaster Tools verification code", widget: "string", required: false }
 
           - name: "analytics"
-            label: "⚙️ Advanced: visitor tracking & cookie banner"
+            label: "③ Analytics"
             widget: "object"
-            collapsed: true
-            hint: "Nothing is tracked until a provider is chosen."
+            hint: "Nothing is loaded until a provider is chosen."
             fields:
               - { name: "_note", label: "Note", widget: "hidden" }
               - { name: "provider", label: "Provider", widget: "select", options: ["", "ga4", "plausible"], required: false }
-              - { name: "ga4MeasurementId", label: "Google Analytics ID", widget: "string", required: false }
+              - { name: "ga4MeasurementId", label: "GA4 measurement ID", widget: "string", required: false }
               - { name: "plausibleDomain", label: "Plausible domain", widget: "string", required: false }
               - name: "consent"
-                label: "Cookie banner (Google Analytics only)"
+                label: "Cookie banner (GA4 only)"
                 widget: "object"
-                collapsed: true
                 fields:
                   - { name: "text", label: "Banner text", widget: "text" }
                   - { name: "accept", label: "Accept button", widget: "string" }
                   - { name: "reject", label: "Reject button", widget: "string" }
                   - { name: "settingsLabel", label: "Footer link to reopen it", widget: "string" }
+
+          # ---------------------------------------------------------------
+          - name: "contact"
+            label: "④ Contact & NAP"
+            widget: "object"
+            hint: "Must match the Google Business Profile exactly — name, address, phone."
+            fields:
+              - { name: "phoneDisplay", label: "Phone (as displayed)", widget: "string" }
+              - { name: "phoneLink", label: "Phone (for tel: links)", widget: "string", hint: "International format, e.g. +447971088302" }
+              - { name: "whatsappNumber", label: "WhatsApp number", widget: "string", hint: "Digits only, e.g. 447971088302" }
+              - { name: "whatsappMessage", label: "Pre-filled WhatsApp message", widget: "string" }
+              - { name: "email", label: "Email", widget: "string" }
+              - name: "address"
+                label: "Address"
+                widget: "object"
+                fields:
+                  - { name: "street", label: "Street", widget: "string", required: false }
+                  - { name: "locality", label: "Town/city", widget: "string" }
+                  - { name: "region", label: "County", widget: "string" }
+                  - { name: "postcode", label: "Postcode", widget: "string" }
+                  - { name: "country", label: "Country code", widget: "string", default: "GB" }
+              - name: "geo"
+                label: "Map coordinates"
+                widget: "object"
+                fields:
+                  - { name: "latitude", label: "Latitude", widget: "number", value_type: "float" }
+                  - { name: "longitude", label: "Longitude", widget: "number", value_type: "float" }
+              - { name: "serviceRadiusMiles", label: "Service radius (miles)", widget: "number", value_type: "int" }
+              - name: "openingHours"
+                label: "Opening hours"
+                widget: "list"
+                fields:
+                  - { name: "days", label: "Days", widget: "string" }
+                  - { name: "hours", label: "Hours", widget: "string" }
+                  - { name: "schema", label: "Schema.org format", widget: "string", required: false, hint: "e.g. Mo-Fr 07:30-18:00 — leave blank for closed days" }
+              - { name: "responseTimePromise", label: "Response time promise", widget: "text" }
+              - { name: "checkatradeUrl", label: "Checkatrade profile URL", widget: "string", required: false }
+              - { name: "freeEstimates", label: "Free estimates line", widget: "string", required: false }
+              - { name: "googleReviewsUrl", label: "Google reviews link", widget: "string", required: false }
+              - { name: "googleBusinessProfileUrl", label: "Google Business Profile link", widget: "string", required: false }
+              - { name: "googleRating", label: "Google rating", widget: "string", required: false }
+              - { name: "googleReviewCount", label: "Google review count", widget: "string", required: false }
+
+          - name: "social"
+            label: "⑤ Social links"
+            widget: "object"
+            hint: "Leave blank to hide the icon."
+            fields:
+              - { name: "facebook", label: "Facebook", widget: "string", required: false }
+              - { name: "instagram", label: "Instagram", widget: "string", required: false }
+              - { name: "linkedin", label: "LinkedIn", widget: "string", required: false }
+              - { name: "youtube", label: "YouTube", widget: "string", required: false }
+              - { name: "tiktok", label: "TikTok", widget: "string", required: false }
+              - { name: "x", label: "X", widget: "string", required: false }
+
+          # ---------------------------------------------------------------
+          - name: "trust"
+            label: "⑥ Trust signals & credentials"
+            widget: "object"
+            fields:
+              - { name: "yearsTrading", label: "Years trading (hero stat)", widget: "string" }
+              - { name: "yearsTradingLabel", label: "Years label", widget: "string" }
+              - { name: "projectsCompleted", label: "Projects completed (hero stat)", widget: "string" }
+              - { name: "projectsCompletedLabel", label: "Projects label", widget: "string" }
+              - { name: "fixedQuotesValue", label: "Quotes stat value", widget: "string" }
+              - { name: "fixedQuotesLabel", label: "Quotes stat label", widget: "string" }
+              - { name: "insuredValue", label: "Insurance stat value", widget: "string" }
+              - { name: "insuredLabel", label: "Insurance stat label", widget: "string" }
+              - { name: "insuranceValue", label: "Insurer and cover level", widget: "string" }
+              - { name: "guarantee", label: "Guarantee length", widget: "string" }
+              - { name: "wasteCarrierLicence", label: "Waste carrier licence number", widget: "string" }
+              - { name: "strapline", label: "Strapline", widget: "text" }
+              - name: "checkatrade"
+                label: "Checkatrade rating (display only)"
+                widget: "object"
+                hint: "REAL, verified figures. Never put these into aggregateRating structured data — a third-party platform's rating can't be marked up as the business's own."
+                fields:
+                  - { name: "_note", label: "Note", widget: "hidden" }
+                  - { name: "rating", label: "Rating", widget: "string" }
+                  - { name: "reviewCount", label: "Number of reviews", widget: "string" }
+                  - { name: "memberSince", label: "Member since", widget: "string" }
+                  - { name: "label", label: "Attribution label", widget: "string" }
+                  - { name: "url", label: "Profile URL", widget: "string" }
+              - { name: "credentialsEyebrow", label: "Credentials eyebrow", widget: "string" }
+              - { name: "credentialsHeading", label: "Credentials heading", widget: "string" }
+              - name: "credentials"
+                label: "Credentials"
+                widget: "list"
+                summary: "{{fields.title}}"
+                fields:
+                  - { name: "title", label: "Title", widget: "string" }
+                  - { name: "body", label: "Body", widget: "text" }
+                  - { name: "flag", label: "Orange 'still to confirm' badge", widget: "string", required: false, hint: "Clear this once the detail is confirmed — the badge disappears." }
+              - name: "accreditations"
+                label: "Accreditation badges"
+                widget: "list"
+                summary: "{{fields.name}}"
+                hint: "DELETE any the business does not actually hold."
+                fields:
+                  - { name: "name", label: "Name", widget: "string" }
+                  - { name: "logo", label: "Logo", widget: "image", required: false }
+                  - { name: "alt", label: "Alt text", widget: "string" }
+                  - { name: "url", label: "Profile link", widget: "string", required: false }
+                  - { name: "membershipNumber", label: "Membership number", widget: "string", required: false }
+
+          # ---------------------------------------------------------------
+          - name: "nav"
+            label: "⑦ Navigation"
+            widget: "object"
+            fields:
+              - name: "primary"
+                label: "Main menu"
+                widget: "list"
+                fields:
+                  - { name: "label", label: "Label", widget: "string" }
+                  - { name: "url", label: "URL", widget: "string" }
+              - name: "footerLegal"
+                label: "Footer legal links"
+                widget: "list"
+                fields:
+                  - { name: "label", label: "Label", widget: "string" }
+                  - { name: "url", label: "URL", widget: "string" }
+
+          - name: "cta"
+            label: "⑧ Calls to action"
+            widget: "object"
+            fields:
+              - { name: "primaryLabel", label: "Primary button label", widget: "string" }
+              - { name: "primaryUrl", label: "Primary button URL", widget: "string" }
+              - { name: "secondaryLabel", label: "Secondary button label", widget: "string" }
+              - { name: "whatsappLabel", label: "WhatsApp button label", widget: "string" }
+              - { name: "bandHeading", label: "Mid-page CTA heading", widget: "string" }
+              - { name: "bandBody", label: "Mid-page CTA body", widget: "text" }
+
+          - name: "form"
+            label: "⑨ Quote form"
+            widget: "object"
+            fields:
+              - { name: "heading", label: "Heading", widget: "string" }
+              - { name: "intro", label: "Intro", widget: "text" }
+              - { name: "submitLabel", label: "Submit button label", widget: "string" }
+              - { name: "nextLabel", label: "Next button label", widget: "string" }
+              - { name: "backLabel", label: "Back button label", widget: "string" }
+              - { name: "stepCounter", label: "Step counter", widget: "string", hint: "Keep {n} and {total} in it, e.g. Step {n} of {total}" }
+              - name: "steps"
+                label: "Step titles"
+                widget: "object"
+                fields:
+                  - { name: "job", label: "Step 1 (job type)", widget: "string" }
+                  - { name: "property", label: "Step 2 (postcode and details)", widget: "string" }
+                  - { name: "details", label: "Step 3 (name and phone)", widget: "string" }
+              - { name: "pickJobMessage", label: "Message if Next is pressed with no job picked", widget: "string" }
+              - { name: "privacyNote", label: "Privacy note", widget: "text" }
+              - { name: "jobTypes", label: "Extra job type options", widget: "list", field: { name: "option", label: "Option", widget: "string" }, hint: "The services are listed on the form automatically. Add only extras here, like Not sure yet." }
+              - { name: "callTimes", label: "Best time to call options", widget: "list", field: { name: "option", label: "Option", widget: "string" }, hint: "Shown as tap buttons. Leave empty to hide the question." }
+              - name: "labels"
+                label: "Field labels"
+                widget: "object"
+                fields:
+                  - { name: "name", label: "Name field", widget: "string" }
+                  - { name: "phone", label: "Phone field", widget: "string" }
+                  - { name: "postcode", label: "Postcode field", widget: "string" }
+                  - { name: "jobType", label: "Job type field", widget: "string" }
+                  - { name: "message", label: "Message field", widget: "string" }
+                  - { name: "callTime", label: "Best time to call field", widget: "string" }
+                  - { name: "optional", label: "Word shown next to optional questions", widget: "string" }
+
+          - name: "strip"
+            label: "⑩ Trade strip"
+            widget: "object"
+            hint: "The row of trades under the hero."
+            fields:
+              - { name: "items", label: "Trades", widget: "list", field: { name: "trade", label: "Trade", widget: "string" } }
+
+          - name: "process"
+            label: "⑪ How it runs"
+            widget: "object"
+            fields:
+              - { name: "eyebrow", label: "Eyebrow", widget: "string" }
+              - { name: "heading", label: "Heading", widget: "string" }
+              - { name: "intro", label: "Intro", widget: "text" }
+              - name: "steps"
+                label: "Steps"
+                widget: "list"
+                summary: "{{fields.title}}"
+                fields:
+                  - { name: "title", label: "Title", widget: "string" }
+                  - { name: "body", label: "Description", widget: "text" }
+                  - { name: "timing", label: "Timing line", widget: "string", required: false }
+
+          - name: "differentiator"
+            label: "⑫ What goes underneath"
+            widget: "object"
+            hint: "The build-up section. The strongest page on the site — keep the numbers honest."
+            fields:
+              - { name: "eyebrow", label: "Eyebrow", widget: "string" }
+              - { name: "heading", label: "Heading", widget: "string" }
+              - { name: "intro", label: "Intro", widget: "text" }
+              - name: "buildUps"
+                label: "Build-ups"
+                widget: "list"
+                summary: "{{fields.title}}"
+                fields:
+                  - { name: "title", label: "Title", widget: "string" }
+                  - name: "layers"
+                    label: "Layers"
+                    widget: "list"
+                    summary: "{{fields.label}} — {{fields.spec}}"
+                    fields:
+                      - { name: "label", label: "Layer", widget: "string" }
+                      - { name: "spec", label: "Spec", widget: "string" }
+                  - { name: "note", label: "Note underneath", widget: "text" }
+              - { name: "closing", label: "Closing paragraph", widget: "text" }
+
+          # ---------------------------------------------------------------
+          - name: "services"
+            label: "⑬ Services"
+            widget: "list"
+            summary: "{{fields.name}}  →  /services/{{fields.slug}}/"
+            hint: "Each entry becomes its own page at /services/<slug>/."
+            fields:
+              - { name: "slug", label: "URL slug", widget: "string", pattern: ['^[a-z0-9]+(-[a-z0-9]+)*$', "Lowercase letters, numbers and hyphens only"] }
+              - { name: "name", label: "Service name", widget: "string" }
+              - { name: "shortName", label: "Short name (link lists)", widget: "string" }
+              - { name: "eyebrow", label: "Card eyebrow", widget: "string", required: false }
+              - { name: "cardSummary", label: "Card summary", widget: "text" }
+              - { name: "image", label: "Image", widget: "image", required: false }
+              - { name: "imageAlt", label: "Image alt text", widget: "string" }
+              - { name: "h1", label: "H1", widget: "string" }
+              - { name: "intro", label: "Intro (40–60 words)", widget: "text" }
+              - { name: "body", label: "Main copy", widget: "text", hint: "Leave a blank line between paragraphs." }
+              - { name: "bullets", label: "What's included", widget: "list", field: { name: "point", label: "Point", widget: "string" } }
+              - { name: "priceLabel", label: "Price label", widget: "string", required: false }
+              - { name: "priceFrom", label: "Price from (blank hides the whole block)", widget: "string", required: false }
+              - name: "seo"
+                label: "SEO"
+                widget: "object"
+                fields:
+                  - { name: "title", label: "Meta title", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] }
+                  - { name: "description", label: "Meta description", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] }
+
+          - name: "areas"
+            label: "⑭ Areas we cover"
+            widget: "list"
+            summary: "{{fields.name}}  →  /areas/{{fields.slug}}/"
+            hint: "Each entry becomes a town hub page. Add matching entries under ⑮ for the money pages."
+            fields:
+              - { name: "slug", label: "URL slug", widget: "string", pattern: ['^[a-z0-9]+(-[a-z0-9]+)*$', "Lowercase letters, numbers and hyphens only"] }
+              - { name: "name", label: "Town name", widget: "string" }
+              - { name: "county", label: "County", widget: "string" }
+              - { name: "postcodes", label: "Postcodes covered", widget: "string", required: false }
+              - { name: "lat", label: "Latitude (for the map)", widget: "number", value_type: "float", required: false }
+              - { name: "lng", label: "Longitude (for the map)", widget: "number", value_type: "float", required: false }
+              - { name: "intro", label: "Intro (40–60 words, unique per town)", widget: "text" }
+              - { name: "localReference", label: "Local reference (one true, specific detail)", widget: "text" }
+              - name: "seo"
+                label: "SEO"
+                widget: "object"
+                fields:
+                  - { name: "title", label: "Meta title", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] }
+                  - { name: "description", label: "Meta description", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] }
+
+          - name: "locationPages"
+            label: "⑮ Town + service landing pages"
+            widget: "list"
+            summary: "/{{fields.areaSlug}}-{{fields.serviceSlug}}/"
+            hint: "The pages that rank for 'roofer Poole'. Every entry needs its OWN copy — duplicated or spun text gets treated as doorway pages."
+            fields:
+              - { name: "areaSlug", label: "Town slug", widget: "string", hint: "Must match a slug under Areas" }
+              - { name: "serviceSlug", label: "Service slug", widget: "string", hint: "Must match a slug under Services" }
+              - { name: "h1", label: "H1", widget: "string" }
+              - { name: "intro", label: "Intro (120–180 unique words)", widget: "text" }
+              - { name: "localReference", label: "Local reference", widget: "text" }
+              - name: "seo"
+                label: "SEO"
+                widget: "object"
+                fields:
+                  - { name: "title", label: "Meta title", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] }
+                  - { name: "description", label: "Meta description", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] }
+
+          - name: "testimonials"
+            label: "⑯ Testimonials"
+            widget: "list"
+            summary: "{{fields.name}} — {{fields.location}}"
+            hint: "Real reviews only. Inventing these is a civil offence in the UK under the DMCC Act 2024."
+            fields:
+              - { name: "quote", label: "Quote", widget: "text" }
+              - { name: "name", label: "Customer name", widget: "string" }
+              - { name: "location", label: "Town", widget: "string" }
+              - { name: "service", label: "Service slug", widget: "string", required: false }
+              - { name: "rating", label: "Rating out of 5", widget: "number", value_type: "int", min: 1, max: 5 }
+              - { name: "date", label: "Date", widget: "string", required: false }
+
+          - name: "jobs"
+            label: "Our work: jobs (photo sets)"
+            widget: "list"
+            summary: "{{fields.title}}"
+            hint: "Each entry is one job, shown on the gallery page as its own set. Put the photos in order, before to after. Titles describe what's in the photos only; the groupings were made from the photos and Kevin should confirm each one."
+            fields:
+              - { name: "id", label: "ID", widget: "string" }
+              - { name: "title", label: "Title", widget: "string" }
+              - { name: "note", label: "One line about the job", widget: "string", required: false }
+              - { name: "cover", label: "Cover photo number (0 = first)", widget: "number", value_type: "int", default: 0 }
+              - name: "photos"
+                label: "Photos"
+                widget: "list"
+                summary: "{{fields.alt}}"
+                fields:
+                  - { name: "image", label: "Photo", widget: "image" }
+                  - { name: "alt", label: "Alt text", widget: "string" }
+
+          - name: "work"
+            label: "Our work: more from site (loose photos)"
+            widget: "list"
+            summary: "{{fields.alt}}"
+            hint: "Single photos that don't belong to a job set. Shown under the jobs on the gallery page. Alt text describes only what is visible in the frame - no town, no date, no job title unless Kevin has confirmed it."
+            fields:
+              - { name: "id", label: "ID", widget: "string" }
+              - { name: "image", label: "Photo", widget: "image" }
+              - { name: "alt", label: "Alt text", widget: "string" }
+
+          - name: "gallery"
+            label: "⑰ Before & after gallery"
+            widget: "list"
+            summary: "{{fields.title}}"
+            fields:
+              - { name: "id", label: "ID", widget: "string" }
+              - { name: "title", label: "Title", widget: "string" }
+              - { name: "service", label: "Service slug", widget: "string", required: false }
+              - { name: "area", label: "Town slug", widget: "string", required: false }
+              - { name: "caption", label: "Caption", widget: "text" }
+              - { name: "beforeImage", label: "Before photo", widget: "image", required: false }
+              - { name: "beforeAlt", label: "Before alt text", widget: "string" }
+              - { name: "afterImage", label: "After photo", widget: "image", required: false }
+              - { name: "afterAlt", label: "After alt text", widget: "string" }
+
+          - name: "faqs"
+            label: "⑱ FAQs"
+            widget: "list"
+            summary: "{{fields.question}}"
+            hint: "These also populate the FAQPage schema Google reads."
+            fields:
+              - { name: "question", label: "Question", widget: "string" }
+              - { name: "answer", label: "Answer", widget: "text" }
+              - { name: "scope", label: "Scope", widget: "select", options: ["global"], default: "global" }
+
+          # ---------------------------------------------------------------
+          - name: "pages"
+            label: "⑲ Page copy"
+            widget: "object"
+            collapsed: true
+            fields:
+              - name: "home"
+                label: "Home page"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { name: "seo", label: "SEO", widget: "object", fields: [
+                      { name: "title", label: "Meta title", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] },
+                      { name: "description", label: "Meta description", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] } ] }
+                  - { name: "heroEyebrow", label: "Hero eyebrow", widget: "string" }
+                  - { name: "heroHeadline", label: "Hero headline", widget: "string" }
+                  - { name: "heroHeadlineAccent", label: "Word to italicise in the headline", widget: "string", required: false }
+                  - { name: "heroSubheadline", label: "Hero sub-headline", widget: "text" }
+                  - { name: "heroImage", label: "Hero image", widget: "image", required: false }
+                  - { name: "heroImageAlt", label: "Hero image alt text", widget: "string" }
+                  - { name: "servicesEyebrow", label: "Services eyebrow", widget: "string" }
+                  - { name: "servicesHeading", label: "Services heading", widget: "string" }
+                  - { name: "servicesIntro", label: "Services intro", widget: "text" }
+                  - { name: "aboutEyebrow", label: "About eyebrow", widget: "string" }
+                  - { name: "aboutHeading", label: "About heading", widget: "string" }
+                  - { name: "aboutBody", label: "About body", widget: "text" }
+                  - { name: "aboutImage", label: "About image", widget: "image", required: false }
+                  - { name: "aboutImageAlt", label: "About image alt text", widget: "string" }
+                  - { name: "galleryEyebrow", label: "Gallery eyebrow", widget: "string" }
+                  - { name: "galleryHeading", label: "Gallery heading", widget: "string" }
+                  - { name: "galleryIntro", label: "Gallery intro", widget: "text" }
+                  - { name: "testimonialsEyebrow", label: "Reviews eyebrow", widget: "string" }
+                  - { name: "testimonialsHeading", label: "Reviews heading", widget: "string" }
+                  - { name: "testimonialsIntro", label: "Reviews intro", widget: "text", required: false }
+                  - { name: "areasEyebrow", label: "Areas eyebrow", widget: "string" }
+                  - { name: "areasHeading", label: "Areas heading", widget: "string" }
+                  - { name: "areasIntro", label: "Areas intro", widget: "text" }
+                  - { name: "faqEyebrow", label: "FAQ eyebrow", widget: "string" }
+                  - { name: "faqHeading", label: "FAQ heading", widget: "string" }
+                  - { name: "faqIntro", label: "FAQ intro", widget: "text", required: false }
+                  - { name: "tileLabels", label: "Hero tile labels", widget: "object", fields: [
+                      { name: "score", label: "Checkatrade score tile", widget: "string" },
+                      { name: "reviews", label: "Review count tile", widget: "string" },
+                      { name: "since", label: "Member since tile", widget: "string" },
+                      { name: "trades", label: "Number of trades tile", widget: "string" } ] }
+                  - { name: "ground", label: "Hero ground cross-section", widget: "object", fields: [
+                      { name: "levelLabel", label: "Ground level label", widget: "string" },
+                      { name: "layers", label: "Layer names, top to bottom (4)", widget: "list", field: { name: "layer", label: "Layer", widget: "string" } } ] }
+                  - { name: "links", label: "Links to the How we work page", widget: "object", fields: [
+                      { name: "underneath", label: "From the build-ups", widget: "string" },
+                      { name: "process", label: "From the process", widget: "string" },
+                      { name: "faq", label: "From the questions", widget: "string" } ] }
+              - name: "services"
+                label: "Services index page"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { name: "seo", label: "SEO", widget: "object", fields: [
+                      { name: "title", label: "Meta title", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] },
+                      { name: "description", label: "Meta description", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] } ] }
+                  - { name: "h1", label: "H1", widget: "string" }
+                  - { name: "intro", label: "Intro", widget: "text" }
+                  - { name: "gridHeading", label: "Grid heading", widget: "string" }
+              - name: "areas"
+                label: "Areas index page"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { name: "seo", label: "SEO", widget: "object", fields: [
+                      { name: "title", label: "Meta title", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] },
+                      { name: "description", label: "Meta description", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] } ] }
+                  - { name: "h1", label: "H1", widget: "string" }
+                  - { name: "intro", label: "Intro", widget: "text" }
+                  - { name: "mapHeading", label: "Map heading", widget: "string", required: false }
+                  - { name: "mapIntro", label: "Line under the map heading", widget: "string", required: false }
+                  - { name: "alsoHeading", label: "Heading for other towns on the map", widget: "string", required: false }
+                  - name: "alsoCovered"
+                    label: "Other towns shown on the map"
+                    widget: "list"
+                    required: false
+                    summary: "{{fields.name}}"
+                    fields:
+                      - { name: "name", label: "Town", widget: "string" }
+                      - { name: "lat", label: "Latitude", widget: "number", value_type: "float" }
+                      - { name: "lng", label: "Longitude", widget: "number", value_type: "float" }
+              - name: "gallery"
+                label: "Gallery page"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { name: "seo", label: "SEO", widget: "object", fields: [
+                      { name: "title", label: "Meta title", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] },
+                      { name: "description", label: "Meta description", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] } ] }
+                  - { name: "h1", label: "H1", widget: "string" }
+                  - { name: "intro", label: "Intro", widget: "text" }
+                  - { name: "gridHeading", label: "Grid heading", widget: "string" }
+                  - { name: "gridIntro", label: "Line under the jobs heading", widget: "string", required: false }
+                  - { name: "moreHeading", label: "Heading for the loose photos", widget: "string", required: false }
+              - name: "about"
+                label: "About page"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { name: "seo", label: "SEO", widget: "object", fields: [
+                      { name: "title", label: "Meta title", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] },
+                      { name: "description", label: "Meta description", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] } ] }
+                  - { name: "h1", label: "H1", widget: "string" }
+                  - { name: "intro", label: "Intro", widget: "text" }
+                  - { name: "body", label: "Body", widget: "text" }
+                  - { name: "image", label: "Image", widget: "image", required: false }
+                  - { name: "imageAlt", label: "Image alt text", widget: "string" }
+                  - { name: "valuesHeading", label: "Values heading", widget: "string" }
+                  - { name: "values", label: "Values", widget: "list", summary: "{{fields.title}}", fields: [
+                      { name: "title", label: "Title", widget: "string" },
+                      { name: "body", label: "Body", widget: "text" } ] }
+              - name: "contact"
+                label: "Contact page"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { name: "seo", label: "SEO", widget: "object", fields: [
+                      { name: "title", label: "Meta title", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] },
+                      { name: "description", label: "Meta description", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] } ] }
+                  - { name: "h1", label: "H1", widget: "string" }
+                  - { name: "intro", label: "Intro", widget: "text" }
+              - name: "thanks"
+                label: "Thank you page"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { name: "seo", label: "SEO", widget: "object", fields: [
+                      { name: "title", label: "Meta title", widget: "string" },
+                      { name: "description", label: "Meta description", widget: "text" } ] }
+                  - { name: "h1", label: "H1", widget: "string" }
+                  - { name: "body", label: "Body", widget: "text" }
+              - name: "notFound"
+                label: "404 page"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { name: "seo", label: "SEO", widget: "object", fields: [
+                      { name: "title", label: "Meta title", widget: "string" },
+                      { name: "description", label: "Meta description", widget: "text" } ] }
+                  - { name: "h1", label: "H1", widget: "string" }
+                  - { name: "body", label: "Body", widget: "text" }
+              - name: "howWeWork"
+                label: "How we work page"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { name: "seo", label: "SEO", widget: "object", fields: [
+                      { name: "title", label: "Meta title", widget: "string", pattern: ['^.{1,60}$', "60 characters max"] },
+                      { name: "description", label: "Meta description", widget: "text", pattern: ['^.{1,155}$', "155 characters max"] } ] }
+                  - { name: "h1", label: "H1", widget: "string" }
+                  - { name: "intro", label: "Intro", widget: "text" }
+              - name: "privacy"
+                label: "Privacy policy"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { name: "seo", label: "SEO", widget: "object", fields: [
+                      { name: "title", label: "Meta title", widget: "string" },
+                      { name: "description", label: "Meta description", widget: "text" } ] }
+                  - { name: "h1", label: "H1", widget: "string" }
+                  - { name: "lastUpdated", label: "Last updated", widget: "string", required: false }
+                  - { name: "body", label: "Policy text", widget: "text" }

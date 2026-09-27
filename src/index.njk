@@ -3,7 +3,6 @@ layout: base.njk
 pageKey: home
 permalink: /
 schemaType: home
-faqScope: global
 ---
 {#- Seven sections, down from thirteen.
 
@@ -11,18 +10,25 @@ faqScope: global
     process, form, testimonials, credentials, areas, FAQ, CTA — thirteen blocks
     with near-identical section heads, which is what made it feel endless.
 
-    Now each stop does one job and looks different from its neighbours:
-      1  hero          — who, what, where, and two ways to make contact
-      2  what we do    — the seven services
-      3  the work      — real photographs, no captions until Kevin supplies them
-      4  underneath    — the dark band. Also the visual midpoint of the page.
-      5  who you are   — the owner, the credentials, the Checkatrade score
-      6  how it runs   — the five stages, then the questions people ask
-      7  quote         — the form
-
-    Areas covered moved to the footer, where it already existed. -#}
+    2026-09-27 lightened again, after comparing with GM and Full Diary: each
+    homepage stop now makes ONE point, visually, and hands the detail to
+    /how-we-work/ (full build-ups, full five stages, every FAQ with its
+    schema). Nothing was deleted, it moved one click away, where it still
+    earns its SEO.
+    Order set by Josh, 2026-09-27 (late):
+      1  hero          full screen photo, Checkatrade proof in glass tiles
+      2  what we do    the seven services (the orb)
+      3  how it runs   the five stages, with a house built as you scroll
+      4  who           the owner, three promises, one photo
+      5  underneath    three layer stacks, no paragraphs
+      6  quote         the form
+      7  questions     six FAQs, all fourteen on /how-we-work/
+    The photo grid ("the work") is off the homepage in Josh's order; the
+    photos live on /gallery/, which the hero's "See the work" opens. The
+    red services strip under the hero was dropped the same day. -#}
 {% from "icons.njk" import phone %}
 {%- set h = tps.pages.home -%}
+{%- set L = h.tileLabels or {} -%}
 
 {# ── 1 ─────────────────────────────────────────────── hero ── #}
 <section class="hero" data-hero>
@@ -30,24 +36,52 @@ faqScope: global
     {% image h.heroImage, h.heroImageAlt, "100vw", null, "eager", "high" %}
   </div>
   <div class="container hero__inner">
-    <p class="eyebrow">{{ h.heroEyebrow }}</p>
-    <h1 class="hero__title">{% if h.heroHeadlineAccent %}{{ h.heroHeadline | replace(h.heroHeadlineAccent, "<em>" + h.heroHeadlineAccent + "</em>") | safe }}{% else %}{{ h.heroHeadline }}{% endif %}</h1>
-    <p class="hero__sub">{{ h.heroSubheadline }}</p>
-    <div class="btn-row">
-      <a class="btn btn--on-dark" href="{{ tps.cta.primaryUrl }}">{{ tps.cta.primaryLabel }}</a>
-      <a class="btn btn--ghost-light" href="/gallery/">See the work</a>
+    <div class="hero__copy">
+      <p class="eyebrow">{{ h.heroEyebrow }}</p>
+      <h1 class="hero__title">{% if h.heroHeadlineAccent %}{{ h.heroHeadline | replace(h.heroHeadlineAccent, "<em>" + h.heroHeadlineAccent + "</em>") | safe }}{% else %}{{ h.heroHeadline }}{% endif %}</h1>
+      <p class="hero__sub">{{ h.heroSubheadline }}</p>
+      <div class="btn-row">
+        <a class="btn btn--on-dark" href="{{ tps.cta.primaryUrl }}">{{ tps.cta.primaryLabel }}</a>
+        <a class="btn btn--ghost-light" href="/gallery/">See the work</a>
+      </div>
     </div>
-    {% include "hero-stats.njk" %}
-    <span class="scroll-cue" aria-hidden="true">Scroll<i></i></span>
+  </div>
+  <a class="hero-scroll" href="#what-we-do" aria-label="Scroll down to what we do"><span>Scroll</span><span class="hero-scroll__line" aria-hidden="true"></span></a>
+
+  {#- THE GROUND (2026-09-28, "bring some uniqueness"): the bottom of the hero
+      is a section drawing of what's under the lawn in the photo. A dashed
+      ground-level line, then topsoil, sub-base, sand and concrete, which dig
+      in on load. The proof sits in the layers. Every figure is verified
+      (Checkatrade profile, the services list). -#}
+  {%- set ct = tps.trust.checkatrade %}
+  {%- set G = h.ground or {} %}
+  <div class="ground">
+    <div class="ground__level" aria-hidden="true"><span>{{ G.levelLabel or "Ground level" }}</span></div>
+    <div class="ground__layers" aria-hidden="true">
+      {%- for name in (G.layers or ["Topsoil", "Sub-base", "Sand", "Concrete"]) %}
+      <div class="ground__layer ground__layer--{{ loop.index }}" style="--i: {{ loop.index0 }}"><span>{{ name }}</span></div>
+      {%- endfor %}
+    </div>
+    <ul class="ground__stats container">
+      {%- if ct.rating %}
+      <li style="--i: 0"><a href="{{ ct.url }}" target="_blank" rel="noopener"><b>{{ ct.rating }}</b><span>{{ L.score }} <span aria-hidden="true">&#8599;</span></span></a></li>
+      {%- endif %}
+      {%- if ct.reviewCount %}
+      <li style="--i: 1"><b data-count>{{ ct.reviewCount }}</b><span>{{ L.reviews }}</span></li>
+      {%- endif %}
+      {%- if ct.memberSince %}
+      <li style="--i: 2"><b>{{ ct.memberSince | string | replace(r/^.*(\d{4})$/, "$1") }}</b><span>{{ L.since }}</span></li>
+      {%- endif %}
+      <li style="--i: 3"><b>{{ tps.services | length }}</b><span>{{ L.trades }}</span></li>
+    </ul>
   </div>
 </section>
 
-{% include "strip.njk" %}
 
 {# ── 2 ────────────────────────────────────────── what we do ── #}
 <section class="section" id="what-we-do">
   <div class="container">
-    <div class="section-head" data-reveal>
+    <div class="section-head section-head--center" data-reveal>
       <p class="eyebrow">{{ h.servicesEyebrow }}</p>
       <h2>{{ h.servicesHeading }}</h2>
       <p>{{ h.servicesIntro }}</p>
@@ -56,78 +90,92 @@ faqScope: global
   </div>
 </section>
 
-{# ── 3 ─────────────────────────────────────────── the work ── #}
-<section class="section section--alt" id="work">
+{# ── 3 ───────────────────────────────────────── how it runs ── #}
+{#- The build: a house goes up on the left as you scroll through the five
+    stages on the right. main.js sets .s-1 to .s-5 on the section from the
+    step in view; with no JS (or before it runs) every stage class is
+    present, so the house shows finished and every step reads normally. -#}
+<section class="section section--alt run s-1 s-2 s-3 s-4 s-5" id="how" data-run>
   <div class="container">
-    <div class="section-head" data-reveal>
-      <p class="eyebrow">{{ h.galleryEyebrow }}</p>
-      <h2>{{ h.galleryHeading }}</h2>
-      <p>{{ h.galleryIntro }}</p>
+    <div class="section-head section-head--center" data-reveal>
+      <p class="eyebrow">{{ tps.process.eyebrow }}</p>
+      <h2>{{ tps.process.heading }}</h2>
+      <p>{{ tps.process.intro }}</p>
     </div>
-    {% set workItems = tps.work | limit(6) %}
-    {% include "work-grid.njk" %}
-    <p class="section-more"><a class="btn btn--secondary" href="/gallery/">See more of our work</a></p>
+    <div class="run__grid">
+      <div class="run__stage">
+        <div class="run__panel">
+          {% include "run-build.njk" %}
+          <div class="run__rail" aria-hidden="true"><i></i></div>
+          <p class="run__caption" aria-hidden="true"><b data-run-num>05</b><span data-run-title>{{ (tps.process.steps | last).title }}</span></p>
+        </div>
+      </div>
+      <ol class="run__steps">
+        {%- for s in tps.process.steps %}
+        <li class="run-step" data-run-step>
+          <span class="run-step__num" aria-hidden="true">{{ "0" + loop.index if loop.index < 10 else loop.index }}</span>
+          <div>
+            <h3>{{ s.title }}</h3>
+            {%- if s.timing %}<p class="run-step__timing">{{ s.timing }}</p>{% endif %}
+            <p>{{ s.body }}</p>
+          </div>
+        </li>
+        {%- endfor %}
+      </ol>
+    </div>
+    <p class="section-more section-more--center" data-reveal><a class="btn btn--secondary" href="/how-we-work/#process">{{ h.links.process }}</a></p>
   </div>
 </section>
 
-{# ── 4 ────────────────────────────────────────── underneath ── #}
-<section class="section section--dark" id="underneath">
+{# ── 4 ─────────────────────────────────────────────── who ── #}
+<section class="section" id="who">
+  <div class="container">
+    <div class="split split--center">
+      <div class="prose" data-reveal>
+        <p class="eyebrow">{{ h.aboutEyebrow }}</p>
+        <h2>{{ h.aboutHeading }}</h2>
+        {% for p in h.aboutBody | paras %}{% if loop.first %}<p class="lede">{{ p }}</p>{% endif %}{% endfor %}
+        <ul class="promise-list">
+          {%- for v in tps.pages.about.values %}
+          <li><span class="promise-list__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><span><b>{{ v.title }}</b><small>{{ v.body }}</small></span></li>
+          {%- endfor %}
+        </ul>
+        <a class="btn btn--secondary" href="/about/">More about {{ tps.site.name }}</a>
+      </div>
+      <div class="frame frame--tall" data-reveal>
+        {% image h.aboutImage, h.aboutImageAlt, "(min-width: 940px) 40vw, 100vw" %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ── 5 ────────────────────────────────────────── underneath ── #}
+<section class="section section--dark section--alt" id="underneath">
   <div class="container">
     <div class="section-head" data-reveal>
       <p class="eyebrow">{{ tps.differentiator.eyebrow }}</p>
       <h2>{{ tps.differentiator.heading }}</h2>
       <p>{{ tps.differentiator.intro }}</p>
     </div>
-    <div data-reveal-group>{% include "buildups.njk" %}</div>
+    {#- The build-ups as cross-sections: each layer is a band, top of the
+        ground to the bottom. The explanations live on /how-we-work/. -#}
+    <div class="strata-row" data-reveal-group>
+      {%- for b in tps.differentiator.buildUps %}
+      <figure class="strata" data-reveal>
+        <figcaption>{{ b.title }}</figcaption>
+        <ol class="strata__layers">
+          {%- for l in b.layers %}
+          <li style="--i: {{ loop.index0 }}"><span>{{ l.label }}</span><b>{{ l.spec }}</b></li>
+          {%- endfor %}
+        </ol>
+      </figure>
+      {%- endfor %}
+    </div>
+    <p class="section-more" data-reveal><a class="btn btn--ghost-light" href="/how-we-work/#underneath">{{ h.links.underneath }}</a></p>
   </div>
 </section>
 
-{# ── 5 ───────────────────────────────── who you're dealing with ── #}
-<section class="section" id="who">
-  <div class="container">
-    <div class="split">
-      <div class="prose">
-        <p class="eyebrow">{{ h.aboutEyebrow }}</p>
-        <h2>{{ h.aboutHeading }}</h2>
-        {% for p in h.aboutBody | paras %}<p>{{ p }}</p>{% endfor %}
-        <a class="btn btn--secondary" href="/about/">More about {{ tps.site.name }}</a>
-      </div>
-      <div class="frame">
-        {% image h.aboutImage, h.aboutImageAlt, "(min-width: 940px) 40vw, 100vw" %}
-      </div>
-    </div>
-
-    <div class="subsection" data-reveal>
-      <p class="eyebrow">{{ tps.trust.credentialsEyebrow }}</p>
-      <h3>{{ tps.trust.credentialsHeading }}</h3>
-    </div>
-    <div data-reveal-group>
-      {% set itemHeading = "h4" %}
-      {% include "credentials.njk" %}
-    </div>
-    <div class="subsection-tight" data-reveal>{% include "testimonials.njk" %}</div>
-  </div>
-</section>
-
-{# ── 6 ───────────────────────────────────────── how it runs ── #}
-<section class="section section--alt" id="how">
-  <div class="container">
-    <div class="section-head" data-reveal>
-      <p class="eyebrow">{{ tps.process.eyebrow }}</p>
-      <h2>{{ tps.process.heading }}</h2>
-      <p>{{ tps.process.intro }}</p>
-    </div>
-    <div data-reveal-group>{% include "process.njk" %}</div>
-
-    <div class="subsection" data-reveal>
-      <p class="eyebrow">{{ h.faqEyebrow }}</p>
-      <h3>{{ h.faqHeading }}</h3>
-    </div>
-    {% include "faq.njk" %}
-  </div>
-</section>
-
-{# ── 7 ──────────────────────────────────────────── the quote ── #}
+{# ── 6 ──────────────────────────────────────────── the quote ── #}
 <section class="section" id="quote">
   <div class="container">
     <div class="split">
@@ -135,17 +183,32 @@ faqScope: global
         <p class="eyebrow">Free quotation</p>
         <h2>{{ tps.form.heading }}</h2>
         <p class="lede">{{ tps.form.intro }}</p>
-        <ul class="tick-list">
+        <ul class="tick-list quote-services">
           {%- for s in tps.services %}<li>{{ s.name }}</li>{% endfor %}
         </ul>
         <p><a class="btn btn--secondary" href="{{ tps.derived.telHref }}">{{ phone() }} {{ tps.contact.phoneDisplay }}</a></p>
       </div>
       <div>
         {% set formId = "home" %}
+        {% set compactHead = true %}
         {% include "quote-form.njk" %}
       </div>
     </div>
   </div>
 </section>
 
-{% include "cta-band.njk" %}
+{# ── 7 ──────────────────────────────────────────── questions ── #}
+<section class="section section--alt" id="questions">
+  <div class="container">
+    <div class="faq-split" data-reveal>
+      <div class="faq-split__head">
+        <p class="eyebrow">{{ h.faqEyebrow }}</p>
+        <h2>{{ h.faqHeading }}</h2>
+        <p><a class="text-link" href="/how-we-work/#faq">{{ h.links.faq }} <span aria-hidden="true">&rarr;</span></a></p>
+      </div>
+      {#- Six here, all of them (with their FAQ schema) on /how-we-work/. -#}
+      {%- set faqItems = tps.derived.globalFaqs | limit(6) %}
+      {% include "faq.njk" %}
+    </div>
+  </div>
+</section>

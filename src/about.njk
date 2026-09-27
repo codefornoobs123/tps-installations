@@ -42,13 +42,16 @@ permalink: /about/
   </div>
 </section>
 
-<section class="section section--alt">
+<section class="section">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow">{{ tps.trust.credentialsEyebrow }}</p>
       <h2>{{ tps.trust.credentialsHeading }}</h2>
     </div>
-    {% include "credentials.njk" %}
+    <div class="trust-row{% if tps.trust.credentials.length < 3 %} trust-row--split{% endif %}">
+      <div>{% include "credentials.njk" %}</div>
+      <div>{% include "testimonials.njk" %}</div>
+    </div>
   </div>
 </section>
 

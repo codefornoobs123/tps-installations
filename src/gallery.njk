@@ -14,7 +14,20 @@ permalink: /gallery/
 
 <section class="section">
   <div class="container">
-    <div class="section-head"><h2>{{ tps.pages.gallery.gridHeading }}</h2></div>
+    <div class="section-head">
+      <h2>{{ tps.pages.gallery.gridHeading }}</h2>
+      {%- if tps.pages.gallery.gridIntro %}<p>{{ tps.pages.gallery.gridIntro }}</p>{% endif %}
+    </div>
+    {% include "job-sets.njk" %}
+  </div>
+</section>
+
+{#- No {% if %} around this on purpose: Nunjucks drops the rest of the
+    page when an include with async image shortcodes sits inside an if.
+    work-grid.njk already renders nothing when the list is empty. -#}
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-head"><h2>{{ tps.pages.gallery.moreHeading or "More from site" }}</h2></div>
     {% include "work-grid.njk" %}
   </div>
 </section>

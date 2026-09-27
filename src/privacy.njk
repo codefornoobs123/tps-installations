@@ -14,9 +14,19 @@ permalink: /privacy/
     </div>
     {%- endif %}
     {#- A paragraph starting "## " becomes a sub-heading. -#}
-    {% for p in tps.pages.privacy.body | paras %}{% if p.slice(0, 3) == "## " %}<h2>{{ p.slice(3) }}</h2>{% else %}<p>{{ p }}</p>{% endif %}{% endfor %}
+    {#- Kept true either way: until a GA4 ID is set there is no analytics
+        and no cookie banner, so the paragraphs about them are swapped for
+        one plain line. Once the ID goes in, the full wording shows. -#}
+    {%- set gaOn = tps.analytics.provider == "ga4" and tps.analytics.ga4MeasurementId %}
+    {% for p in tps.pages.privacy.body | paras %}
+      {%- if p.slice(0, 3) == "## " %}<h2>{{ p.slice(3) }}</h2>
+        {%- if not gaOn and "ookie" in p %}<p>This site sets no advertising or analytics cookies, so there is no cookie banner. If that changes, this page will be updated first.</p>{% endif %}
+      {%- elif not gaOn and ("Google Analytics" in p or "cookie choice" in p) %}
+      {%- else %}<p>{{ p }}</p>{% endif %}
+    {%- endfor %}
     <h2>Contact</h2>
     <p>{{ tps.site.legalName }}, {{ tps.derived.addressLine }}</p>
     <p><a href="{{ tps.derived.telHref }}">{{ tps.contact.phoneDisplay }}</a>{% if tps.contact.email %} &middot; <a href="mailto:{{ tps.contact.email }}">{{ tps.contact.email }}</a>{% endif %}</p>
+    <div id="company-details">{% include "company-details.njk" %}</div>
   </div>
 </section>

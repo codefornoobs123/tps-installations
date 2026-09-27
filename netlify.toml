@@ -19,7 +19,7 @@
   publish = "_site"
 
 [build.environment]
-  NODE_VERSION = "22"
+  NODE_VERSION = "20"
 
 # Every deploy is otherwise a COLD build: eleventy-img re-renders every photo
 # into AVIF + WebP + JPEG at four widths, about 5 minutes. Caching the output

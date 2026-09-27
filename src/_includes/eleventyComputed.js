@@ -57,7 +57,10 @@ module.exports = {
       ];
     }
     if (data.pageKey && data.pageKey !== "home" && data.tps && data.tps.pages[data.pageKey]) {
-      return [home, { label: data.tps.pages[data.pageKey].h1 || data.tps.pages[data.pageKey].seo.title, url: data.page.url }];
+      // Prefer the short nav label ("About", "Contact") over a long H1.
+      const nav = ((data.tps.nav || {}).primary || []).find((n) => n.url === data.page.url);
+      const pg = data.tps.pages[data.pageKey];
+      return [home, { label: (nav && nav.label) || (pg.seo && pg.seo.title) || pg.h1, url: data.page.url }];
     }
     return [];
   },

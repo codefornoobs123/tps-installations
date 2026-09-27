@@ -5,7 +5,6 @@
 @font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:400;font-display:swap;src:url("/assets/fonts/plus-jakarta-sans-400.woff2") format("woff2")}
 @font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:500;font-display:swap;src:url("/assets/fonts/plus-jakarta-sans-500.woff2") format("woff2")}
 @font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:600;font-display:swap;src:url("/assets/fonts/plus-jakarta-sans-600.woff2") format("woff2")}
-@font-face{font-family:"Space Mono";font-style:normal;font-weight:400;font-display:swap;src:url("/assets/fonts/space-mono-400.woff2") format("woff2")}
 
 /* Metric-matched fallbacks. Measured in-browser: Lora sets 118.7% the width of
    Georgia at the same size, Plus Jakarta Sans 92.4% of system-ui. size-adjust

@@ -1,0 +1,31 @@
+{#- Our work, one set per job (Josh, 2026-09-27: "sort the work photos in
+    galleries of each job"). Photos are in the order they were taken, before
+    to after; the cover is just the one shown big. The groupings and titles
+    come from what's visible in the photos and Kevin should confirm them.
+    Titles never name a town, a date or a customer. Tapping any photo opens
+    the lightbox and steps through that job only (.job-set is a lightbox
+    group in main.js). -#}
+<div class="job-sets" data-reveal-group>
+  {%- for j in tps.jobs %}
+  {%- set n = j.photos.length %}
+  {%- set c = j.cover or 0 %}
+  <article class="job-set" data-reveal>
+    <div class="job-set__cover">
+      {%- set cp = j.photos[c] %}
+      {% image cp.image, cp.alt, "(min-width: 1000px) 42vw, 100vw" %}
+      <span class="job-set__count">{{ n }} photos</span>
+    </div>
+    <div class="job-set__body">
+      <h3>{{ j.title }}</h3>
+      {%- if j.note %}<p>{{ j.note }}</p>{% endif %}
+      {%- if n > 1 %}
+      <ul class="job-set__thumbs" aria-label="All photos from this job">
+        {%- for ph in j.photos %}{% if loop.index0 != c %}
+        <li>{% image ph.image, ph.alt, "96px" %}</li>
+        {%- endif %}{% endfor %}
+      </ul>
+      {%- endif %}
+    </div>
+  </article>
+  {%- endfor %}
+</div>

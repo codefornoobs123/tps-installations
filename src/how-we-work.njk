@@ -1,0 +1,54 @@
+---
+layout: base.njk
+pageKey: howWeWork
+permalink: /how-we-work/
+faqScope: global
+---
+{#- The detail the homepage used to carry, now in one place people who want
+    it will read: the full build-ups with their explanations, the five stages
+    in full, and every question with FAQPage schema. -#}
+{% include "breadcrumbs.njk" %}
+
+<section class="page-head">
+  <div class="container">
+    <h1>{{ tps.pages.howWeWork.h1 }}</h1>
+    <p>{{ tps.pages.howWeWork.intro }}</p>
+  </div>
+</section>
+
+<section class="section section--dark" id="underneath">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">{{ tps.differentiator.eyebrow }}</p>
+      <h2>{{ tps.differentiator.heading }}</h2>
+      <p>{{ tps.differentiator.intro }}</p>
+    </div>
+    <div data-reveal-group>{% include "buildups.njk" %}</div>
+  </div>
+</section>
+
+<section class="section section--alt" id="process">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">{{ tps.process.eyebrow }}</p>
+      <h2>{{ tps.process.heading }}</h2>
+      <p>{{ tps.process.intro }}</p>
+    </div>
+    <div data-reveal-group>{% include "process.njk" %}</div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="container">
+    <div class="faq-split">
+      <div class="faq-split__head">
+        <p class="eyebrow">{{ tps.pages.home.faqEyebrow }}</p>
+        <h2>{{ tps.pages.home.faqHeading }}</h2>
+        {%- if tps.pages.home.faqIntro %}<p>{{ tps.pages.home.faqIntro }}</p>{% endif %}
+      </div>
+      {% include "faq.njk" %}
+    </div>
+  </div>
+</section>
+
+{% include "cta-band.njk" %}

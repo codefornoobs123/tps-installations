@@ -1,7 +1,0 @@
-<ul class="area-list">
-  {%- for a in tps.areas %}
-  <li>
-    <a href="{{ a.url }}">{{ a.name }}<span>{{ a.county }}{% if a.postcodes %} &middot; {{ a.postcodes }}{% endif %}</span></a>
-  </li>
-  {%- endfor %}
-</ul>

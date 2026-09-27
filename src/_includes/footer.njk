@@ -4,7 +4,12 @@
     <div class="footer-grid">
 
       <div>
-        <h2>{{ tps.site.name }}</h2>
+        <h2 class="visually-hidden">{{ tps.site.name }}</h2>
+        <a class="footer-logo" href="/" aria-label="{{ tps.site.name }}, home">
+          <img src="/assets/img/logo-mark.svg" alt="" width="52" height="40" loading="lazy">
+          <span aria-hidden="true"><b>T.P.S.</b><small>Installations Limited</small></span>
+          {%- if tps.site.strapline %}<em class="footer-logo__strap" aria-hidden="true">{{ tps.site.strapline }}</em>{% endif %}
+        </a>
         <p>{{ tps.site.tagline }}</p>
         {%- if tps.derived.hasSocial %}
         <div class="social-row">
@@ -59,10 +64,10 @@
     <div class="footer-bottom">
       <p style="margin:0">
         &copy; {% if tps.site.copyrightStartYear and (tps.site.copyrightStartYear | string) != (tps.derived.currentYear | string) %}{{ tps.site.copyrightStartYear }}-{% endif %}{{ tps.derived.currentYear }} {{ tps.site.legalName }}.
-        {#- Companies Act trading disclosures: number, where registered, registered office. -#}
-        {% if tps.site.companyNumber %} Registered in {{ tps.site.registeredIn or "England and Wales" }}, company no. {{ tps.site.companyNumber }}.{% endif %}
-        {% if tps.site.registeredOffice %} Registered office: {{ tps.site.registeredOffice }}.{% endif %}
-        {% if tps.site.vatNumber %} VAT no. {{ tps.site.vatNumber }}.{% endif %}
+        {#- The registration details (company number, registered office, VAT)
+            are a legal must for the website, but moved off the footer at
+            Josh's request: they're on /contact/ and /privacy/ via
+            company-details.njk. The "Company details" link below goes there. -#}
       </p>
       <ul>
         {%- for item in tps.nav.footerLegal %}

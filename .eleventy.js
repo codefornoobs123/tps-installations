@@ -125,10 +125,24 @@ module.exports = function (eleventyConfig) {
     return String(s || "")
       .split(/\n{2,}|\r\n\r\n/)
       .map((p) => p.trim())
-      .filter(Boolean);
+      .filter(Boolean)
+      // A paragraph still holding [instructions] or a TPS_ token is not
+      // finished copy, so it never reaches the page.
+      .filter((p) => !/TPS_[A-Z_]+|\[[^\]]{3,}\]/.test(p));
   });
 
   eleventyConfig.addFilter("where", (arr, key, value) => (arr || []).filter((i) => i[key] === value));
+  /* Areas map: a town's position on the /areas/ map, and its straight-line
+     distance in miles from the base (contact.geo). The map is centred on the
+     base at (300, 215) in a 600 x 480 viewBox, 26px to the mile. */
+  eleventyConfig.addFilter("mapPoint", function (p, base) {
+    if (!p || p.lat == null || !base) return null;
+    const R = 3958.8, rad = (d) => (d * Math.PI) / 180;
+    const dLat = rad(p.lat - base.latitude), dLng = rad(p.lng - base.longitude);
+    const dx = dLng * Math.cos(rad(base.latitude)) * R, dy = dLat * R;
+    const miles = Math.sqrt(dx * dx + dy * dy);
+    return { x: Math.round((300 + dx * 26) * 10) / 10, y: Math.round((215 - dy * 26) * 10) / 10, miles: miles < 0.5 ? 0 : Math.round(miles) };
+  });
   eleventyConfig.addFilter("limit", (arr, n) => (arr || []).slice(0, n));
 
   /* ======================================================================

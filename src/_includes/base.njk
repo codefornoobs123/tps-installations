@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" data-theme="light" lang="{{ tps.site.language or 'en-GB' }}">
+<html class="no-js" data-theme="dark" lang="{{ tps.site.language or 'en-GB' }}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -50,12 +50,13 @@
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 
-{#- Type. Three faces, self-hosted from npm (@fontsource), latin subset,
-    font-display: swap. Only the three used above the fold are preloaded —
-    the heavier Lora weights are fetched when the browser meets them. -#}
+{#- Type. Two families, self-hosted from npm (@fontsource), latin subset,
+    font-display: swap: Lora for headings, Plus Jakarta Sans for everything
+    else (Space Mono was dropped 2026-09-27). The three weights used above
+    the fold are preloaded. -#}
 <link rel="preload" href="/assets/fonts/lora-500.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
 <link rel="preload" href="/assets/fonts/plus-jakarta-sans-400.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
-<link rel="preload" href="/assets/fonts/space-mono-400.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+<link rel="preload" href="/assets/fonts/plus-jakarta-sans-600.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
 
 {#- The whole stylesheet, minified and inlined: zero render-blocking requests. -#}
 <script src="/assets/js/boot.js"></script>

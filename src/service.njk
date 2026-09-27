@@ -32,13 +32,21 @@ permalink: "{{ service.url }}"
         {%- if service.priceFrom %}<p class="price-from"><small>{{ service.priceLabel }}</small>{{ service.priceFrom }}</p>{% endif %}
 
         <h2>{{ service.name }} near you</h2>
-        <p>We cover {{ tps.areas | length }} towns across {{ tps.areas[0].county }}. Pick yours for local detail and recent jobs:</p>
+        <p>The towns we work in most. Pick yours for the local planning rules and what to expect there:</p>
+        {#- Town+service pages where they exist, otherwise the town pages, so
+            this list is never empty. -#}
+        {%- set svcLocs = [] -%}
+        {%- for lp in tps.locationPages %}{% if lp.service.slug == service.slug %}{% set svcLocs = (svcLocs.push(lp), svcLocs) %}{% endif %}{% endfor -%}
         <ul class="link-cloud">
-          {%- for lp in tps.locationPages %}
-            {%- if lp.service.slug == service.slug %}
+          {%- if svcLocs.length %}
+          {%- for lp in svcLocs %}
           <li><a href="{{ lp.url }}">{{ service.shortName or service.name }} in {{ lp.area.name }}</a></li>
-            {%- endif %}
           {%- endfor %}
+          {%- else %}
+          {%- for a in tps.areas %}
+          <li><a href="{{ a.url }}">{{ a.name }}</a></li>
+          {%- endfor %}
+          {%- endif %}
         </ul>
       </div>
 

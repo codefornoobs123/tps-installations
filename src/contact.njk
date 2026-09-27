@@ -18,6 +18,7 @@ permalink: /contact/
     <div class="split">
       <div>
         {% set formId = "contact" %}
+        {% set compactHead = true %}
         {% include "quote-form.njk" %}
       </div>
       <div class="prose">
@@ -49,6 +50,8 @@ permalink: /contact/
         <ul class="link-cloud">
           {%- for a in tps.areas %}<li><a href="{{ a.url }}">{{ a.name }}</a></li>{% endfor %}
         </ul>
+
+        {% include "company-details.njk" %}
       </div>
     </div>
   </div>

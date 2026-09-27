@@ -2,10 +2,11 @@
 <header class="site-header">
   <div class="container site-header__inner">
     <a class="site-logo" href="/">
-      {#- Logo lockup, matching TPS's own logo (tpsinstallations.co.uk): the
-          house mark traced from it in brand brown, "T.P.S." and "INSTALLATIONS
-          LIMITED" underneath. Swap in the printer's vector file if it turns up. -#}
-      <img src="{{ tps.site.logo }}" alt="" width="52" height="40" fetchpriority="high">
+      {#- The TPS logo from the tpsinstallations.co.uk holding page, set for
+          the dark header: the house (logo-mark.svg, cream walls, brick
+          roof), "T.P.S." in bold serif and "INSTALLATIONS LIMITED" in clay.
+          No white box: it sits in the header like part of it. -#}
+      <img src="/assets/img/logo-mark.svg" alt="" width="52" height="40" fetchpriority="high">
       <span class="visually-hidden">{{ tps.site.name }}, home</span>
       <span class="site-logo__words" aria-hidden="true">
         <b class="site-logo__text">T.P.S.</b>

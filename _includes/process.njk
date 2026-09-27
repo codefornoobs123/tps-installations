@@ -1,9 +1,0 @@
-<ol class="steps">
-  {%- for s in tps.process.steps %}
-  <li>
-    <h3>{{ s.title }}</h3>
-    <p>{{ s.body }}</p>
-    {%- if s.timing %}<span class="timing">{{ s.timing }}</span>{% endif %}
-  </li>
-  {%- endfor %}
-</ol>

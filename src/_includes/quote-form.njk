@@ -19,8 +19,14 @@
 {%- set pre = prefillService or "" -%}
 <div class="quote-form" data-quote-form>
   <div class="qf-progress" aria-hidden="true"><span class="qf-progress__bar"></span></div>
+  {#- compactHead: the page already shows this heading and intro right next
+      to the form, so the card keeps them for screen readers only. -#}
+  {%- if compactHead %}
+  <h2 class="visually-hidden" id="{{ fid }}-heading">{{ formHeading or tps.form.heading }}</h2>
+  {%- else %}
   <h2 id="{{ fid }}-heading">{{ formHeading or tps.form.heading }}</h2>
   <p class="quote-form__intro">{{ tps.form.intro }}</p>
+  {%- endif %}
 
   <form name="quote" method="POST" data-netlify="true" data-netlify-honeypot="company-website" data-netlify-recaptcha="true" action="/thanks/" aria-labelledby="{{ fid }}-heading">
     <input type="hidden" name="form-name" value="quote">

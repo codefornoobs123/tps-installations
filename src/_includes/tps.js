@@ -78,7 +78,7 @@ module.exports = function () {
       area,
       service,
       url: `/${area.slug}-${service.slug}/`,
-      gallery: (raw.gallery || []).filter(
+      gallery: (raw.gallery || []).filter((g) => !unfinished([g.title, g.caption])).filter(
         (g) => g.area === area.slug || g.service === service.slug
       ),
     });
@@ -107,7 +107,9 @@ module.exports = function () {
   const c = raw.contact || {};
   const telHref = `tel:${String(c.phoneLink || "").replace(/[^\d+]/g, "") || c.phoneLink}`;
   // A placeholder WhatsApp number would produce a dead wa.me link, so no link.
-  const waDigits = unfinished(c.whatsappNumber) ? "" : String(c.whatsappNumber || "").replace(/[^\d]/g, "");
+  // wa.me needs the full international number with no leading 0 or +,
+  // so a UK "07971 088302" becomes 447971088302.
+  const waDigits = unfinished(c.whatsappNumber) ? "" : String(c.whatsappNumber || "").replace(/[^\d]/g, "").replace(/^0044/, "44").replace(/^0(?=\d{10}$)/, "44");
   const waHref = waDigits
     ? `https://wa.me/${waDigits}?text=${encodeURIComponent(c.whatsappMessage || "")}`
     : "";
@@ -154,8 +156,15 @@ module.exports = function () {
     console.warn(`\n[content] Held back until real (not rendered):\n  ${held.join("\n  ")}\n`);
   }
 
+  const gallery = (raw.gallery || []).filter((g) => {
+    const hide = unfinished([g.title, g.caption, g.beforeAlt, g.afterAlt]);
+    if (hide) held.push(`gallery "${g.title}" (placeholder)`);
+    return !hide;
+  });
+
   return {
     ...raw,
+    gallery,
     site,
     contact,
     trust: { ...t, credentials, accreditations, insuranceConfirmed },

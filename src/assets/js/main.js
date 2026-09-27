@@ -15,6 +15,7 @@
     var setOpen = function (open) {
       toggle.setAttribute("aria-expanded", String(open));
       nav.setAttribute("data-open", String(open));
+      document.documentElement.classList.toggle("nav-is-open", open);
       toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
       document.body.classList.toggle("is-locked", open);
     };
@@ -677,7 +678,7 @@
       count.textContent = many ? (idx + 1) + " / " + set.length : "";
     }
     function open(img) {
-      var group = img.closest(".work-grid, .gallery");
+      var group = img.closest(".work-grid, .gallery, .job-set");
       set = group ? imgs.filter(function (x) { return group.contains(x); }) : [img];
       opener = img;
       show(set.indexOf(img));
@@ -759,6 +760,100 @@
     }, { passive: true });
     document.documentElement.addEventListener("mouseleave", function () { glow.classList.remove("is-on"); });
   }
+
+  /* ---------------------------------------------------------------------
+     Hero scroll parallax. Writes one number, --hero-p (0 at the top, 1 once
+     the hero has scrolled away), and the CSS turns it into a slow sink on
+     the photo and a lift-and-fade on the copy. Transform/opacity only,
+     skipped entirely for reduced motion, and idle once past the hero.
+     --------------------------------------------------------------------- */
+  (function () {
+    var hero = document.querySelector("[data-hero]");
+    if (!hero || !window.matchMedia || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var ticking = false, last = -1;
+    function update() {
+      ticking = false;
+      var h = hero.offsetHeight || 1;
+      var p = Math.min(1, Math.max(0, window.pageYOffset / h));
+      p = Math.round(p * 1000) / 1000;
+      if (p === last) return;
+      last = p;
+      hero.style.setProperty("--hero-p", p);
+    }
+    window.addEventListener("scroll", function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+  })();
+
+  /* ---------------------------------------------------------------------
+     How it runs: the build. Works out which of the five steps is in view
+     and puts .s-1 up to .s-N on the section, which builds the house in the
+     panel (CSS does the rest). The markup ships with every stage on, so
+     with no JS the house is finished and the steps read normally.
+     --------------------------------------------------------------------- */
+  (function () {
+    var run = document.querySelector("[data-run]");
+    if (!run) return;
+    var steps = Array.prototype.slice.call(run.querySelectorAll("[data-run-step]"));
+    if (!steps.length) return;
+    var panel = run.querySelector(".run__panel");
+    var num = run.querySelector("[data-run-num]");
+    var title = run.querySelector("[data-run-title]");
+    var stacked = window.matchMedia ? window.matchMedia("(max-width: 899px)") : { matches: false };
+    var n = steps.length, current = -1, ticking = false;
+    run.classList.add("run--live");
+
+    function setStage(k) {
+      if (k === current) return;
+      current = k;
+      for (var i = 1; i <= n; i++) run.classList.toggle("s-" + i, i <= k);
+      steps.forEach(function (el, i) {
+        el.classList.toggle("is-on", i === k - 1);
+        el.classList.toggle("is-done", i < k - 1);
+      });
+      run.style.setProperty("--run-p", k / n);
+      var active = steps[Math.max(0, k - 1)];
+      if (num) num.textContent = (k < 10 ? "0" : "") + Math.max(1, k);
+      if (title) title.textContent = active.querySelector("h3").textContent;
+    }
+    function update() {
+      ticking = false;
+      var vh = window.innerHeight;
+      // The line a step has to cross to become live: just under the panel
+      // on a phone (it rides along at the top), a bit above middle on desktop.
+      var line = vh * 0.55;
+      if (stacked.matches && panel) line = Math.min(vh * 0.8, panel.getBoundingClientRect().bottom + vh * 0.12);
+      var k = 1;
+      for (var i = 0; i < n; i++) if (steps[i].getBoundingClientRect().top < line) k = i + 1;
+      setStage(k);
+    }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    update();
+  })();
+
+  /* ---------------------------------------------------------------------
+     Areas map: hovering or focusing a town card lights its pin and line on
+     the map, and hovering a pin lights its card.
+     --------------------------------------------------------------------- */
+  (function () {
+    var cov = document.querySelector(".coverage");
+    if (!cov) return;
+    function light(slug, on) {
+      Array.prototype.forEach.call(cov.querySelectorAll('[data-area="' + slug + '"]'), function (el) {
+        el.classList.toggle("is-lit", on);
+      });
+    }
+    Array.prototype.forEach.call(cov.querySelectorAll(".cov-card, .cov-pin"), function (el) {
+      var slug = el.getAttribute("data-area");
+      el.addEventListener("mouseenter", function () { light(slug, true); });
+      el.addEventListener("mouseleave", function () { light(slug, false); });
+      el.addEventListener("focusin", function () { light(slug, true); });
+      el.addEventListener("focusout", function () { light(slug, false); });
+    });
+  })();
 
   /* ---------------------------------------------------------------------
      Netlify Identity. The widget is only downloaded when someone follows an

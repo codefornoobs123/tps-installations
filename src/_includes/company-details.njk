@@ -1,0 +1,13 @@
+{#- Companies Act trading disclosures (Company, LLP and Business (Names and
+    Trading Disclosures) Regulations 2015, reg 25): a company's website has
+    to show its registered name, where it's registered, its number and its
+    registered office. It doesn't have to be in the footer of every page, so
+    at Josh's request (2026-09-27) it lives here, on Contact and Privacy,
+    both linked from every page. Don't delete it from BOTH places. -#}
+<h2 class="company-details__h">Company details</h2>
+<p class="company-details">
+  {{ tps.site.legalName }}.
+  {%- if tps.site.companyNumber %} Registered in {{ tps.site.registeredIn or "England and Wales" }}, company number {{ tps.site.companyNumber }}.{% endif %}
+  {%- if tps.site.registeredOffice %} Registered office: {{ tps.site.registeredOffice }}.{% endif %}
+  {%- if tps.site.vatNumber %} VAT number {{ tps.site.vatNumber }}.{% endif %}
+</p>
