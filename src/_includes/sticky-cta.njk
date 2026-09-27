@@ -1,0 +1,10 @@
+{% from "icons.njk" import phone, whatsapp, quote %}
+<div class="sticky-cta" role="region" aria-label="Quick contact">
+  <a class="sticky-cta__call" href="{{ tps.derived.telHref }}" aria-label="{{ tps.cta.secondaryLabel }}, {{ tps.site.name }} on {{ tps.contact.phoneDisplay }}">{{ phone() }}<span>{{ tps.cta.secondaryLabel }}</span></a>
+  {%- if tps.derived.waHref %}
+  <a class="sticky-cta__wa" href="{{ tps.derived.waHref }}" target="_blank" rel="noopener">{{ whatsapp() }}<span>WhatsApp</span></a>
+  {%- else %}
+  {#- No confirmed WhatsApp number yet: the second half goes to the quote form. -#}
+  <a class="sticky-cta__wa" href="{{ tps.cta.primaryUrl }}">{{ quote() }}<span>{{ tps.cta.primaryLabel }}</span></a>
+  {%- endif %}
+</div>
